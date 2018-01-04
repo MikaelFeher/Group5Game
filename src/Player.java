@@ -30,4 +30,8 @@ public class Player {
     public int getPlayerY() {
         return playerY;
     }
+
+    public int getPlayerSpeed() {
+        return playerSpeed;
+    }
 }
