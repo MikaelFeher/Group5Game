@@ -34,4 +34,9 @@ public class Player {
     public int getPlayerSpeed() {
         return playerSpeed;
     }
+
+    public void reset() {
+        playerY = 15;
+        playerX = 50;
+    }
 }
