@@ -20,7 +20,7 @@ public class GameLoop {
         getPlayerPosition();
     }
 
-    public void run() {
+    public void run(){
         while(!gameOver) {
             screen.clear();
             gameArea();
@@ -30,20 +30,7 @@ public class GameLoop {
         }
         handleKeyPress();
     }
-
-    private void frameCollisionDetection() {
-        getPlayerPosition();
-
-        if (playerX == minX || playerX == maxX || playerY == minY || playerY == maxY) {
-            gameOver = true;
-            screen.clear();
-            gameArea();
-            screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
-            screen.refresh();
-            run();
-        }
-    }
-
+    
     private void handleKeyPress() {
         Key key = screen.readInput();
         while (key == null) {
@@ -52,22 +39,22 @@ public class GameLoop {
         switch (key.getKind()) {
             case ArrowUp:
                 handlePlayerMovement("up");
-                frameCollisionDetection();
+                //Monster.moveUp();
                 run();
                 break;
             case ArrowDown:
                 handlePlayerMovement("down");
-                frameCollisionDetection();
+                //Monster.moveDown();
                 run();
                 break;
             case ArrowLeft:
                 handlePlayerMovement("left");
-                frameCollisionDetection();
+                //Monster.moveLeft();
                 run();
                 break;
             case ArrowRight:
                 handlePlayerMovement("right");
-                frameCollisionDetection();
+                //Monster.moveRight();
                 run();
                 break;
             case NormalKey:
@@ -77,26 +64,44 @@ public class GameLoop {
                     gameOver = false;
                     run();
                 } else if (key.getCharacter() == 'q') {
+                    gameOver = true;
+                    screen.clear();
+                    screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+                    screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+                    screen.refresh();
+                    try{
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     screen.stopScreen();
-                    
                 }
                 break;
         }
     }
 
     private void handlePlayerMovement(String direction) {
+        getPlayerPosition();
         switch (direction) {
             case "up":
-                player.moveUp();
+                if (!(playerY <= minY + playerSpeed)){
+                    player.moveUp();
+                }
                 break;
             case "down":
-                player.moveDown();
+                if (!(playerY >= maxY - playerSpeed)) {
+                    player.moveDown();
+                }
                 break;
             case "left":
-                player.moveLeft();
+                if(!(playerX <= minX + playerSpeed)){
+                    player.moveLeft();
+                }
                 break;
             case "right":
-                player.moveRight();
+                if (!(playerX >= maxX - playerSpeed)) {
+                    player.moveRight();
+                }
                 break;
         }
         getPlayerPosition();
@@ -142,4 +147,18 @@ public class GameLoop {
         screen.refresh();
 
     }
+
 }
+
+//    private void frameCollisionDetection() {
+//        getPlayerPosition();
+//
+//        if (playerX == minX || playerX == maxX || playerY == minY || playerY == maxY) {
+//            gameOver = true;
+//            screen.clear();
+//            gameArea();
+//            screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
+//            screen.refresh();
+//            run();
+//        }
+//    }
