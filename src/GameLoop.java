@@ -4,69 +4,41 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
-import java.util.LinkedList;
-
 public class GameLoop {
     Screen screen = TerminalFacade.createScreen();
-    Player player = new Player();
-    boolean gameOver = false;
-    int playerX, playerY;
-    int playerSpeed = player.getPlayerSpeed();
-    int minX = 30;
-    int maxX = 70;
-    int minY = 5;
-    int maxY = 25;
+    Player player;
+    MonsterHandler monsterHandler;
+    boolean gameOver;
+    int playerX, playerY, playerSpeed;
+    private int minX = 30, maxX = 70;
+    private int minY = 5, maxY = 25;
 
     public GameLoop() {
+        init();
     }
 
-    /********************** MONSTER TEST AREA ****************************/
-
-
-
-    int[] monsters = new int[10];
-
-    public void renderMonster() {
-        Monster monster1 = new Monster();
-        Monster monster2 = new Monster();
-        Monster monster3 = new Monster();
-
-        monster1.getMonsterX();
-        monster1.getMonsterY();
-        monster1.getMonsterSpeed();
-        monster2.getMonsterX();
-        monster2.getMonsterY();
-        monster2.getMonsterSpeed();
-        monster3.getMonsterX();
-        monster3.getMonsterY();
-        monster3.getMonsterSpeed();
-
-
-//        monsters[0] = "firstMonster";
-
-//        for(int i = 0; i < monsters.length; i++) {
-//            System.out.println("monster: " + monsters[i].getMonsterX());
-//        }
-
-//        Object test = monsters[0];
-        System.out.println(monsters[0]);
+    public void init() {
+        player = new Player();
+        monsterHandler = new MonsterHandler();
+        gameOver = false;
+        createStarterMonsters();
     }
 
-
-
-
-
-
-
-
-    /********************** MONSTER TEST AREA End ************************/
+    private void createStarterMonsters() {
+        int numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
+        while(numberOfMonsters < 3){
+            monsterHandler.addMonster(new Monster(), player);
+            numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
+            System.out.println(numberOfMonsters);
+        }
+    }
 
     public void run(){
         while(!gameOver) {
             screen.clear();
             gameArea();
             renderPlayer();
-            renderMonster();
+            monsterHandler.renderMonsters(screen);
             handleKeyPress();
             screen.refresh();
         }
@@ -102,8 +74,7 @@ public class GameLoop {
             case NormalKey:
                 if (key.getCharacter() == 'n'){
                     System.out.println("Reset knappen tryckt");
-                    player.reset();
-                    gameOver = false;
+                    init();
                     run();
                 } else if (key.getCharacter() == 'q') {
                     gameOver = true;
@@ -117,13 +88,16 @@ public class GameLoop {
                         e.printStackTrace();
                     }
                     screen.stopScreen();
+                } else if(key.getCharacter() == 'd') {
+                    monsterHandler.deleteAllMonsters();
+                    run();
                 }
                 break;
         }
     }
 
     private void handlePlayerMovement(String direction) {
-        getPlayerPosition();
+        getPlayerPositionAndSpeed();
         switch (direction) {
             case "up":
                 if (!(playerY <= minY + playerSpeed)){
@@ -147,18 +121,19 @@ public class GameLoop {
                 break;
         }
         // For testing purposes
-        getPlayerPosition();
+        getPlayerPositionAndSpeed();
         System.out.println("playerX: " + playerX);
         System.out.println("playerY: " + playerY);
     }
 
-    private void getPlayerPosition() {
+    private void getPlayerPositionAndSpeed() {
         playerX = player.getPlayerX();
         playerY = player.getPlayerY();
+        playerSpeed = player.getPlayerSpeed();
     }
 
     private void renderPlayer() {
-        getPlayerPosition();
+        getPlayerPositionAndSpeed();
         screen.putString(playerX,playerY,"X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         screen.refresh();
     }
