@@ -4,10 +4,12 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import java.util.LinkedList;
+
 public class GameLoop {
     Screen screen = TerminalFacade.createScreen();
     Player player = new Player();
-    boolean gameOver;
+    boolean gameOver = false;
     int playerX, playerY;
     int playerSpeed = player.getPlayerSpeed();
     int minX = 30;
@@ -16,21 +18,61 @@ public class GameLoop {
     int maxY = 25;
 
     public GameLoop() {
-        gameOver = false;
-        getPlayerPosition();
     }
+
+    /********************** MONSTER TEST AREA ****************************/
+
+
+
+    int[] monsters = new int[10];
+
+    public void renderMonster() {
+        Monster monster1 = new Monster();
+        Monster monster2 = new Monster();
+        Monster monster3 = new Monster();
+
+        monster1.getMonsterX();
+        monster1.getMonsterY();
+        monster1.getMonsterSpeed();
+        monster2.getMonsterX();
+        monster2.getMonsterY();
+        monster2.getMonsterSpeed();
+        monster3.getMonsterX();
+        monster3.getMonsterY();
+        monster3.getMonsterSpeed();
+
+
+//        monsters[0] = "firstMonster";
+
+//        for(int i = 0; i < monsters.length; i++) {
+//            System.out.println("monster: " + monsters[i].getMonsterX());
+//        }
+
+//        Object test = monsters[0];
+        System.out.println(monsters[0]);
+    }
+
+
+
+
+
+
+
+
+    /********************** MONSTER TEST AREA End ************************/
 
     public void run(){
         while(!gameOver) {
             screen.clear();
             gameArea();
             renderPlayer();
+            renderMonster();
             handleKeyPress();
             screen.refresh();
         }
         handleKeyPress();
     }
-    
+
     private void handleKeyPress() {
         Key key = screen.readInput();
         while (key == null) {
@@ -104,6 +146,7 @@ public class GameLoop {
                 }
                 break;
         }
+        // For testing purposes
         getPlayerPosition();
         System.out.println("playerX: " + playerX);
         System.out.println("playerY: " + playerY);
@@ -120,6 +163,7 @@ public class GameLoop {
         screen.refresh();
     }
 
+    //Temporary rendering of gamearea until the gamearea class is implemented...
     public void gameArea(){
 
         screen.startScreen();
