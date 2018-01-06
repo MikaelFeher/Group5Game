@@ -8,7 +8,22 @@ public class MonsterHandler {
 
     private Monster tempMonster;
 
-    // collisionDetectionMonsterVsPlayer();
+     public boolean collisionDetectionMonsterVsPlayer(Player player) {
+         int pX = player.getPlayerX();
+         int pY = player.getPlayerY();
+         int mX, mY;
+
+         for (int i = 0; i < monsters.size(); i++) {
+             tempMonster = monsters.get(i);
+             mX = tempMonster.getMonsterX();
+             mY = tempMonster.getMonsterY();
+
+             if(pX == mX && pY == mY){
+                 return true;
+             }
+         }
+         return false;
+     }
 
      public void handleMovement(Player player) {
          int pX = player.getPlayerX();

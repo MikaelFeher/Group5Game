@@ -27,15 +27,15 @@ public class GameLoop {
 
     private void createStarterMonsters() {
         int numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
-        while(numberOfMonsters < 3){
+        while (numberOfMonsters < 3) {
             monsterHandler.addMonster(new Monster(), player);
             numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
             System.out.println(numberOfMonsters);
         }
     }
 
-    public void run(){
-        while(!gameOver) {
+    public void run() {
+        while (!gameOver) {
             screen.clear();
             gameArea();
             renderPlayer();
@@ -51,49 +51,70 @@ public class GameLoop {
         while (key == null) {
             key = screen.readInput();
         }
+        if (!gameOver) {
+            switch (key.getKind()) {
+                case ArrowUp:
+                    handlePlayerMovement("up");
+                    monsterHandler.handleMovement(player);
+                    collisionDetection();
+                    run();
+                    break;
+                case ArrowDown:
+                    handlePlayerMovement("down");
+                    monsterHandler.handleMovement(player);
+                    collisionDetection();
+                    run();
+                    break;
+                case ArrowLeft:
+                    handlePlayerMovement("left");
+                    monsterHandler.handleMovement(player);
+                    collisionDetection();
+                    run();
+                    break;
+                case ArrowRight:
+                    handlePlayerMovement("right");
+                    monsterHandler.handleMovement(player);
+                    collisionDetection();
+                    run();
+                    break;
+                case NormalKey:
+                    handleNormalKeys(key);
+                    break;
+            }
+        }
         switch (key.getKind()) {
-            case ArrowUp:
-                handlePlayerMovement("up");
-                monsterHandler.handleMovement(player);
-                run();
-                break;
-            case ArrowDown:
-                handlePlayerMovement("down");
-                monsterHandler.handleMovement(player);
-                run();
-                break;
-            case ArrowLeft:
-                handlePlayerMovement("left");
-                monsterHandler.handleMovement(player);
-                run();
-                break;
-            case ArrowRight:
-                handlePlayerMovement("right");
-                monsterHandler.handleMovement(player);
-                run();
-                break;
             case NormalKey:
-                if (key.getCharacter() == 'n'){
-                    System.out.println("Reset knappen tryckt");
-                    init();
-                    run();
-                } else if (key.getCharacter() == 'q') {
-                    gameOver = true;
-                    screen.clear();
-                    screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-                    screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-                    screen.refresh();
-                    try{
-                        Thread.sleep(4000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    screen.stopScreen();
-                } else if(key.getCharacter() == 'd') {
-                    monsterHandler.deleteAllMonsters();
-                    run();
-                }
+                handleNormalKeys(key);
                 break;
+        }
+    }
+
+    private void handleNormalKeys(Key key) {
+        if (key.getCharacter() == 'n') {
+            System.out.println("Reset knappen tryckt");
+            resetGame();
+        } else if (key.getCharacter() == 'q') {
+            gameOver = true;
+            screen.clear();
+            screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+            screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+            screen.refresh();
+            try {
+                Thread.sleep(4000);
+                screen.stopScreen();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else if (key.getCharacter() == 'd') {
+            monsterHandler.deleteAllMonsters();
+            run();
+        }
+    }
+
+    private void collisionDetection() {
+        gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+        if (gameOver) {
+            gameOver();
         }
     }
 
@@ -101,7 +122,7 @@ public class GameLoop {
         getPlayerPositionAndSpeed();
         switch (direction) {
             case "up":
-                if (playerY - playerSpeed <= minY){
+                if (playerY - playerSpeed <= minY) {
                     player.setPlayerY(minY + 1);
                 } else {
                     player.moveUp();
@@ -115,7 +136,7 @@ public class GameLoop {
                 }
                 break;
             case "left":
-                if(playerX - playerSpeed <= minX){
+                if (playerX - playerSpeed <= minX) {
                     player.setPlayerX(minX + 1);
                 } else {
                     player.moveLeft();
@@ -143,39 +164,51 @@ public class GameLoop {
 
     private void renderPlayer() {
         getPlayerPositionAndSpeed();
-        screen.putString(playerX,playerY,"X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
+        screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         screen.refresh();
     }
 
+    private void gameOver() {
+        gameOver = true;
+        screen.clear();
+        gameArea();
+        screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
+        screen.refresh();
+    }
+
+    private void resetGame() {
+        init();
+        run();
+    }
+
     //Temporary rendering of gamearea until the gamearea class is implemented...
-    public void gameArea(){
+    public void gameArea() {
 
         screen.startScreen();
         screen.setCursorPosition(null);
-        screen.putString(45,2,"THE GAME-NAME", Terminal.Color.YELLOW, Terminal.Color.BLACK, ScreenCharacterStyle.Underline);
+        screen.putString(45, 2, "THE GAME-NAME", Terminal.Color.YELLOW, Terminal.Color.BLACK, ScreenCharacterStyle.Underline);
 
 //      GameArea Left and right
 
-        for (int i =30; i <=70; i+=2){
-            screen.putString(i,5,"*", Terminal.Color.GREEN, Terminal.Color.BLACK);
-            screen.putString(i,25,"*", Terminal.Color.GREEN, Terminal.Color.BLACK);
+        for (int i = 30; i <= 70; i += 2) {
+            screen.putString(i, 5, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
+            screen.putString(i, 25, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
         }
 
 //      GameArea over and under
 
-        for (int j = 5; j<=25; j++){
-            screen.putString(30,j,"*", Terminal.Color.GREEN, Terminal.Color.BLACK);
-            screen.putString(70,j,"*", Terminal.Color.GREEN, Terminal.Color.BLACK);
+        for (int j = 5; j <= 25; j++) {
+            screen.putString(30, j, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
+            screen.putString(70, j, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
         }
 
-        screen.putString(33,27," [N] NEW GAME             [Q] QUIT", Terminal.Color.GREEN, Terminal.Color.BLACK);
+        screen.putString(33, 27, " [N] NEW GAME             [Q] QUIT", Terminal.Color.GREEN, Terminal.Color.BLACK);
 //Player
 
 //        screen.putString(xPlayer,yPlayer,"X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         screen.refresh();
 
     }
-
 }
 
 //    private void frameCollisionDetection() {
