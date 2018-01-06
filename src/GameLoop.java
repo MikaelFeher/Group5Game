@@ -9,7 +9,8 @@ public class GameLoop {
     Player player;
     MonsterHandler monsterHandler;
     boolean gameOver;
-    int playerX, playerY, playerSpeed;
+    int playerX, playerY;
+    int playerSpeed;
     private int minX = 30, maxX = 70;
     private int minY = 5, maxY = 25;
 
@@ -53,22 +54,22 @@ public class GameLoop {
         switch (key.getKind()) {
             case ArrowUp:
                 handlePlayerMovement("up");
-                //Monster.moveUp();
+                monsterHandler.handleMovement(player);
                 run();
                 break;
             case ArrowDown:
                 handlePlayerMovement("down");
-                //Monster.moveDown();
+                monsterHandler.handleMovement(player);
                 run();
                 break;
             case ArrowLeft:
                 handlePlayerMovement("left");
-                //Monster.moveLeft();
+                monsterHandler.handleMovement(player);
                 run();
                 break;
             case ArrowRight:
                 handlePlayerMovement("right");
-                //Monster.moveRight();
+                monsterHandler.handleMovement(player);
                 run();
                 break;
             case NormalKey:
@@ -100,22 +101,30 @@ public class GameLoop {
         getPlayerPositionAndSpeed();
         switch (direction) {
             case "up":
-                if (!(playerY <= minY + playerSpeed)){
+                if (playerY - playerSpeed <= minY){
+                    player.setPlayerY(minY + 1);
+                } else {
                     player.moveUp();
                 }
                 break;
             case "down":
-                if (!(playerY >= maxY - playerSpeed)) {
+                if (playerY + playerSpeed >= maxY) {
+                    player.setPlayerY(maxY - 1);
+                } else {
                     player.moveDown();
                 }
                 break;
             case "left":
-                if(!(playerX <= minX + playerSpeed)){
+                if(playerX - playerSpeed <= minX){
+                    player.setPlayerX(minX + 1);
+                } else {
                     player.moveLeft();
                 }
                 break;
             case "right":
-                if (!(playerX >= maxX - playerSpeed)) {
+                if (playerX + playerSpeed >= maxX) {
+                    player.setPlayerX(maxX - 1);
+                } else {
                     player.moveRight();
                 }
                 break;

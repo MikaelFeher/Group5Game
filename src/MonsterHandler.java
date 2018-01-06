@@ -8,6 +8,47 @@ public class MonsterHandler {
 
     private Monster tempMonster;
 
+    // collisionDetectionMonsterVsPlayer();
+
+     public void handleMovement(Player player) {
+         int pX = player.getPlayerX();
+         int pY = player.getPlayerY();
+
+        for (int i = 0; i < monsters.size(); i++) {
+            tempMonster = monsters.get(i);
+            int diffX = getPositionDifference(pX, tempMonster.getMonsterX());
+            int diffY = getPositionDifference(pY, tempMonster.getMonsterY());
+
+            if (diffX == 0 && diffY < 0){
+                tempMonster.moveUp();
+            } else if(diffX == 0 && diffY > 0){
+                tempMonster.moveDown();
+            } else if(diffY == 0 && diffX < 0) {
+                tempMonster.moveLeft();
+            } else if(diffY == 0 && diffX > 0) {
+                tempMonster.moveRight();
+            } else {
+                if (diffX < 0 && diffY < 0) {
+                    tempMonster.moveLeft();
+                    tempMonster.moveUp();
+                } else if (diffX < 0 && diffY > 0) {
+                    tempMonster.moveLeft();
+                    tempMonster.moveDown();
+                } else if (diffX > 0 && diffY < 0) {
+                    tempMonster.moveRight();
+                    tempMonster.moveUp();
+                } else {
+                    tempMonster.moveRight();
+                    tempMonster.moveDown();
+                }
+            }
+        }
+     }
+
+     private int getPositionDifference(int playerPos, int monsterPos) {
+         return playerPos - monsterPos;
+     }
+
     public void addMonster(Monster monster, Player player) {
         if (monster.getMonsterX() != player.getPlayerX() && monster.getMonsterY() != player.getPlayerY()){
             this.monsters.add(monster);
