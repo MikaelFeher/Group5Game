@@ -5,35 +5,32 @@ import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public class GameLoop {
+    // VARIABLES
     Player player;
     MonsterHandler monsterHandler;
     GameArea gameArea = new GameArea();
     boolean gameOver;
-    int playerX, playerY;
-    int playerSpeed;
-    private int minX = 30, maxX = 70;
-    private int minY = 5, maxY = 25;
+    int playerX, playerY, playerSpeed;
 
+    // GAME AREA BORDERS
+    private int leftBorder = 30, rightBorder = 70;
+    private int topBorder = 5, bottomBorder = 25;
+
+    // CONSTRUCTOR
     public GameLoop() {
         init();
     }
 
+    // GAME INITIALIZER
     public void init() {
-        gameArea.gameAreaReset();
         player = new Player();
         monsterHandler = new MonsterHandler();
         gameOver = false;
+        gameArea.gameAreaReset();
         createStarterMonsters();
     }
 
-    private void createStarterMonsters() {
-        int numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
-        while (numberOfMonsters < 3) {
-            monsterHandler.addMonster(new Monster(), player);
-            numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
-        }
-    }
-
+    // ACTUAL GAME LOOP
     public void run() {
         while (!gameOver) {
             gameArea.screen.clear();
@@ -46,6 +43,7 @@ public class GameLoop {
         handleKeyPress();
     }
 
+    // HANDLING PLAYER INPUT
     private void handleKeyPress() {
         Key key = gameArea.screen.readInput();
         while (key == null) {
@@ -110,6 +108,7 @@ public class GameLoop {
         }
     }
 
+    // COLLISION DETECTION
     private void collisionDetection() {
         gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
         if (gameOver) {
@@ -117,33 +116,43 @@ public class GameLoop {
         }
     }
 
+    // MONSTER SECTION
+    private void createStarterMonsters() {
+        int numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
+        while (numberOfMonsters < 3) {
+            monsterHandler.addMonster(new Monster(), player);
+            numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
+        }
+    }
+
+    // PLAYER SECTION
     private void handlePlayerMovement(String direction) {
         getPlayerPositionAndSpeed();
         switch (direction) {
             case "up":
-                if (playerY - playerSpeed <= minY) {
-                    player.setPlayerY(minY + 1);
+                if (playerY - playerSpeed <= topBorder) {
+                    player.setPlayerY(topBorder + 1);
                 } else {
                     player.moveUp();
                 }
                 break;
             case "down":
-                if (playerY + playerSpeed >= maxY) {
-                    player.setPlayerY(maxY - 1);
+                if (playerY + playerSpeed >= bottomBorder) {
+                    player.setPlayerY(bottomBorder - 1);
                 } else {
                     player.moveDown();
                 }
                 break;
             case "left":
-                if (playerX - playerSpeed <= minX) {
-                    player.setPlayerX(minX + 1);
+                if (playerX - playerSpeed <= leftBorder) {
+                    player.setPlayerX(leftBorder + 1);
                 } else {
                     player.moveLeft();
                 }
                 break;
             case "right":
-                if (playerX + playerSpeed >= maxX) {
-                    player.setPlayerX(maxX - 1);
+                if (playerX + playerSpeed >= rightBorder) {
+                    player.setPlayerX(rightBorder - 1);
                 } else {
                     player.moveRight();
                 }
@@ -163,6 +172,7 @@ public class GameLoop {
         gameArea.update();
     }
 
+    // HELPER METHODS
     private void gameOver() {
         gameOver = true;
         gameArea.screen.clear();
