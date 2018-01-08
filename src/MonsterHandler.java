@@ -85,12 +85,4 @@ public class MonsterHandler {
         }
         screen.refresh();
     }
-
-    // TEMPORARY for testing...
-    public void displayMonsterX() {
-        for (int i = 0; i < monsters.size(); i++) {
-            tempMonster = monsters.get(i);
-            System.out.println("MonsterX: " + tempMonster.getMonsterX());
-        }
-    }
 }

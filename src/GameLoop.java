@@ -5,9 +5,9 @@ import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public class GameLoop {
-    Screen screen = TerminalFacade.createScreen();
     Player player;
     MonsterHandler monsterHandler;
+    GameArea gameArea = new GameArea();
     boolean gameOver;
     int playerX, playerY;
     int playerSpeed;
@@ -19,6 +19,7 @@ public class GameLoop {
     }
 
     public void init() {
+        gameArea.gameAreaReset();
         player = new Player();
         monsterHandler = new MonsterHandler();
         gameOver = false;
@@ -30,26 +31,25 @@ public class GameLoop {
         while (numberOfMonsters < 3) {
             monsterHandler.addMonster(new Monster(), player);
             numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
-            System.out.println(numberOfMonsters);
         }
     }
 
     public void run() {
         while (!gameOver) {
-            screen.clear();
-            gameArea();
+            gameArea.screen.clear();
+            gameArea.render();
             renderPlayer();
-            monsterHandler.renderMonsters(screen);
+            monsterHandler.renderMonsters(gameArea.screen);
             handleKeyPress();
-            screen.refresh();
+            gameArea.update();
         }
         handleKeyPress();
     }
 
     private void handleKeyPress() {
-        Key key = screen.readInput();
+        Key key = gameArea.screen.readInput();
         while (key == null) {
-            key = screen.readInput();
+            key = gameArea.screen.readInput();
         }
         if (!gameOver) {
             switch (key.getKind()) {
@@ -91,17 +91,16 @@ public class GameLoop {
 
     private void handleNormalKeys(Key key) {
         if (key.getCharacter() == 'n') {
-            System.out.println("Reset knappen tryckt");
             resetGame();
         } else if (key.getCharacter() == 'q') {
             gameOver = true;
-            screen.clear();
-            screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            screen.refresh();
+            gameArea.screen.clear();
+            gameArea.screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+            gameArea.screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+            gameArea.update();
             try {
                 Thread.sleep(4000);
-                screen.stopScreen();
+                gameArea.screen.stopScreen();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -150,10 +149,6 @@ public class GameLoop {
                 }
                 break;
         }
-        // For testing purposes
-        getPlayerPositionAndSpeed();
-        System.out.println("playerX: " + playerX);
-        System.out.println("playerY: " + playerY);
     }
 
     private void getPlayerPositionAndSpeed() {
@@ -164,62 +159,20 @@ public class GameLoop {
 
     private void renderPlayer() {
         getPlayerPositionAndSpeed();
-        screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
-        screen.refresh();
+        gameArea.screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
+        gameArea.update();
     }
 
     private void gameOver() {
         gameOver = true;
-        screen.clear();
-        gameArea();
-        screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
-        screen.refresh();
+        gameArea.screen.clear();
+        gameArea.render();
+        gameArea.screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
+        gameArea.update();
     }
 
     private void resetGame() {
         init();
         run();
     }
-
-    //Temporary rendering of gamearea until the gamearea class is implemented...
-    public void gameArea() {
-
-        screen.startScreen();
-        screen.setCursorPosition(null);
-        screen.putString(45, 2, "THE GAME-NAME", Terminal.Color.YELLOW, Terminal.Color.BLACK, ScreenCharacterStyle.Underline);
-
-//      GameArea Left and right
-
-        for (int i = 30; i <= 70; i += 2) {
-            screen.putString(i, 5, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
-            screen.putString(i, 25, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
-        }
-
-//      GameArea over and under
-
-        for (int j = 5; j <= 25; j++) {
-            screen.putString(30, j, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
-            screen.putString(70, j, "*", Terminal.Color.GREEN, Terminal.Color.BLACK);
-        }
-
-        screen.putString(33, 27, " [N] NEW GAME             [Q] QUIT", Terminal.Color.GREEN, Terminal.Color.BLACK);
-//Player
-
-//        screen.putString(xPlayer,yPlayer,"X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
-        screen.refresh();
-
-    }
 }
-
-//    private void frameCollisionDetection() {
-//        getPlayerPosition();
-//
-//        if (playerX == minX || playerX == maxX || playerY == minY || playerY == maxY) {
-//            gameOver = true;
-//            screen.clear();
-//            gameArea();
-//            screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
-//            screen.refresh();
-//            run();
-//        }
-//    }
