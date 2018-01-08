@@ -1,7 +1,10 @@
+
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("Welcome to the game!");
-        GameArea gameArea = new GameArea();
-        gameArea.render();
+        GameLoop gameLoop = new GameLoop();
+        gameLoop.run();
     }
 }
+

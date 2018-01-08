@@ -10,6 +10,7 @@ public class GameArea {
 
     public void render() {
 
+
         screen.startScreen();
         screen.setCursorPosition(null);
         screen.putString(45, 2, "THE GAME-NAME", Terminal.Color.YELLOW, Terminal.Color.BLACK, ScreenCharacterStyle.Underline);
