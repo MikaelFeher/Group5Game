@@ -4,7 +4,7 @@ public class Player {
     public Player() {
         playerY = 15;
         playerX = 50;
-        playerSpeed = 1;
+        playerSpeed = 2;
     }
 
     public void moveUp() {
