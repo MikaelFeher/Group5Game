@@ -5,7 +5,7 @@ public class Monster {
         Random randomNumber = new Random();
         monsterX = randomNumber.nextInt((38))+31;
         monsterY = randomNumber.nextInt((18))+6;
-        monsterSpeed = randomNumber.nextInt((2))+1;
+        monsterSpeed = 1;
     }
     public void moveUp() {
         this.monsterY -= monsterSpeed;
