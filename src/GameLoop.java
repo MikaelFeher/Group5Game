@@ -4,9 +4,9 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 public class GameLoop {
     // VARIABLES
-    Player player;
-    MonsterHandler monsterHandler;
-    GameArea gameArea = new GameArea();
+    private Player player;
+    private MonsterHandler monsterHandler;
+    private GameArea gameArea = new GameArea();
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
