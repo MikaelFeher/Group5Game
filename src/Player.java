@@ -1,10 +1,11 @@
 public class Player {
-    int playerX, playerY, playerSpeed;
+    private int playerX, playerY, playerSpeed, playerLife;
 
     public Player() {
         playerY = 15;
         playerX = 50;
         playerSpeed = 2;
+        playerLife = 3;
     }
 
     public void moveUp() {
@@ -46,5 +47,13 @@ public class Player {
     public void reset() {
         playerY = 15;
         playerX = 50;
+    }
+
+    public void playerLooseLife() {
+        playerLife--;
+    }
+
+    public void playerWinLife() {
+        playerLife++;
     }
 }
