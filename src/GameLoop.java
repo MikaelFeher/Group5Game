@@ -7,6 +7,7 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
+    private ExtraLife extraLife = new ExtraLife();
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
@@ -52,6 +53,7 @@ public class GameLoop {
         renderPlayer();
         addMonstersBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
+        extraLife.renderLife(screen);
     }
 
     // HANDLING PLAYER INPUT
@@ -130,6 +132,7 @@ public class GameLoop {
     private void addMonstersBasedOnPlayerScore() {
         if (playerScore > 20 && playerScore % 5 == 0) {
             monsterHandler.addMonster(new Monster(), player);
+            extraLife.addLife();
         }
     }
 

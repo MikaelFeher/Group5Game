@@ -20,11 +20,21 @@ public class ExtraLife {
     }
 
     public void renderLife(Screen screen) {
-        tempLife = extraLives.get(0);
-        screen.putString(tempLife.lifeX, tempLife.lifeY, "*", yellow, black);
+
+        if (extraLives.size() != 0) {
+            diplayLivesInList();
+            tempLife = extraLives.get(0);
+            screen.putString(tempLife.lifeX, tempLife.lifeY, "*", yellow, black);
+        }
     }
 
     public void addLife() {
         extraLives.add(new ExtraLife());
+    }
+
+    public void diplayLivesInList() {
+        System.out.println("Lives in list:" + extraLives.size());
+        System.out.println("LifeX:" + extraLives.get(0).lifeX);
+        System.out.println("LifeY:" + extraLives.get(0).lifeY);
     }
 }
