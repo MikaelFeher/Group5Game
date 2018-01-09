@@ -49,8 +49,15 @@ public class Player {
         playerX = 50;
     }
 
+    public int getPlayerLife() {
+        return playerLife;
+    }
+
     public void playerLooseLife() {
-        playerLife--;
+        if(playerLife > 0){
+            playerLife--;
+        }
+        System.out.println("life: " + playerLife);
     }
 
     public void playerWinLife() {

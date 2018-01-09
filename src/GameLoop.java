@@ -110,8 +110,10 @@ public class GameLoop {
 
     // COLLISION DETECTION
     private void collisionDetection() {
-        gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
-        if (gameOver) {
+        boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+        if (collision && player.getPlayerLife() > 0) {
+            player.playerLooseLife();
+        } else if (collision && player.getPlayerLife() == 0) {
             gameOver();
         }
     }
