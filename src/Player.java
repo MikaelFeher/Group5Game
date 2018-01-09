@@ -35,6 +35,14 @@ public class Player {
         return playerSpeed;
     }
 
+    public void setPlayerX(int playerX) {
+        this.playerX = playerX;
+    }
+
+    public void setPlayerY(int playerY) {
+        this.playerY = playerY;
+    }
+
     public void reset() {
         playerY = 15;
         playerX = 50;
