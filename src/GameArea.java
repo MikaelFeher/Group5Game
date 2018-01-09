@@ -39,7 +39,7 @@ public class GameArea {
     }
 
     public void displayCurrentHighScore(int highScore) {
-        screen.putString(79, 6, "HIGH SCORE: " + highScore, Terminal.Color.YELLOW, Terminal.Color.BLACK);
+        screen.putString(78, 6, "HIGH SCORE: " + highScore, Terminal.Color.YELLOW, Terminal.Color.BLACK);
     }
 
     public void displayPlayerScore(int playerScore) {
@@ -52,16 +52,11 @@ public class GameArea {
         screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
         update();
         try {
-            Thread.sleep(1000);
-            screen.putString(29, 14, "This window will self destruct in 3 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            update();
-            Thread.sleep(1000);
-            screen.putString(29, 14, "This window will self destruct in 2 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            update();
-            Thread.sleep(1000);
-            screen.putString(29, 14, "This window will self destruct in 1 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            update();
-            Thread.sleep(1000);
+            for(int i = 3; i >= 0; i--) {
+                Thread.sleep(1000);
+                screen.putString(29, 14, "This window will self destruct in " + i + " seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+                update();
+            }
             screen.clear();
             screen.putString(47, 14, "Bye Bye!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
             update();

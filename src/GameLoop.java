@@ -37,7 +37,7 @@ public class GameLoop {
     // ACTUAL GAME LOOP
     public void run() {
         while (!gameOver) {
-            gameArea.screen.clear();
+            screen.clear();
             renderGameAssets();
             handleKeyPress();
             gameArea.update();
@@ -51,7 +51,7 @@ public class GameLoop {
         gameArea.displayPlayerScore(playerScore);
         renderPlayer();
         addMonstersBasedOnPlayerScore();
-        monsterHandler.renderMonsters(gameArea.screen);
+        monsterHandler.renderMonsters(screen);
     }
 
     // HANDLING PLAYER INPUT
@@ -179,7 +179,7 @@ public class GameLoop {
 
     private void renderPlayer() {
         getPlayerPositionAndSpeed();
-        gameArea.screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
+        screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         gameArea.update();
     }
 
@@ -187,12 +187,12 @@ public class GameLoop {
     private void gameOver() {
         boolean newHighScore = calculatingHighScore();
         gameOver = true;
-        gameArea.screen.clear();
+        screen.clear();
         gameArea.render();
-        gameArea.screen.putString(46, 14, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
-        gameArea.screen.putString(40, 16, "Your final score: " + playerScore, Terminal.Color.RED, Terminal.Color.BLACK);
+        screen.putString(46, 14, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
+        screen.putString(40, 16, "Your final score: " + playerScore, Terminal.Color.RED, Terminal.Color.BLACK);
         if(newHighScore) {
-            gameArea.screen.putString(77, 8, "NEW HIGH SCORE!!!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+            screen.putString(77, 8, "NEW HIGH SCORE!!!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
         }
         gameArea.displayCurrentHighScore(highScore);
         gameArea.update();
