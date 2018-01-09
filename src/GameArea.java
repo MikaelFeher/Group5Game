@@ -38,4 +38,32 @@ public class GameArea {
         render();
     }
 
+    public void displayCurrentHighScore(int highScore) {
+        screen.putString(78, 6, "HIGH SCORE: " + highScore, Terminal.Color.YELLOW, Terminal.Color.BLACK);
+    }
+
+    public void displayPlayerScore(int playerScore) {
+        screen.putString(73, 6, "Score: " + playerScore, Terminal.Color.YELLOW, Terminal.Color.BLACK);
+    }
+
+    public void displayPlayerQuitMessage() {
+        screen.clear();
+        screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+        screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+        update();
+        try {
+            for(int i = 3; i >= 0; i--) {
+                Thread.sleep(1000);
+                screen.putString(29, 14, "This window will self destruct in " + i + " seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+                update();
+            }
+            screen.clear();
+            screen.putString(47, 14, "Bye Bye!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+            update();
+            Thread.sleep(1500);
+            screen.stopScreen();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
