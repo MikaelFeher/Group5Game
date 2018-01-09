@@ -1,6 +1,6 @@
 import java.util.Random;
 public class Monster {
-    int monsterX, monsterY, monsterSpeed;
+    private int monsterX, monsterY, monsterSpeed;
     public Monster() {
         Random randomNumber = new Random();
         monsterX = randomNumber.nextInt((38))+31;
