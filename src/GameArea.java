@@ -10,6 +10,7 @@ public class GameArea {
     private Terminal.Color green = Terminal.Color.GREEN;
     private Terminal.Color black = Terminal.Color.BLACK;
     private Terminal.Color yellow = Terminal.Color.YELLOW;
+    private String borderCharacter = "*";
 
     public int getTopBorder() {
         return topBorder;
@@ -32,18 +33,18 @@ public class GameArea {
     public void render() {
         screen.startScreen();
         screen.setCursorPosition(null);
-        screen.putString(45, 2, "THE GAME-NAME",yellow, black, ScreenCharacterStyle.Underline);
+        screen.putString(45, 2, "THE GAME-NAME", yellow, black, ScreenCharacterStyle.Underline);
 
 //      GameArea Left and right
         for (int i = leftBorder; i <= rightBorder; i += 2) {
-            screen.putString(i, topBorder, "*", green, black);
-            screen.putString(i, bottomBorder, "*", green, black);
+            screen.putString(i, topBorder, borderCharacter, green, black);
+            screen.putString(i, bottomBorder, borderCharacter, green, black);
         }
 
 //      GameArea over and under
         for (int j = topBorder; j <= bottomBorder; j++) {
-            screen.putString(leftBorder, j, "*", green, black);
-            screen.putString(rightBorder, j, "*", green, black);
+            screen.putString(leftBorder, j, borderCharacter, green, black);
+            screen.putString(rightBorder, j, borderCharacter, green, black);
         }
 
         screen.putString(33, 27, " [N] NEW GAME             [Q] QUIT", green, black);
@@ -61,26 +62,26 @@ public class GameArea {
     }
 
     public void displayCurrentHighScore(int highScore) {
-        screen.putString(78, 6, "HIGH SCORE: " + highScore,yellow, black);
+        screen.putString(78, 6, "HIGH SCORE: " + highScore, yellow, black);
     }
 
     public void displayPlayerScore(int playerScore) {
-        screen.putString(73, 6, "Score: " + playerScore,yellow, black);
+        screen.putString(73, 6, "Score: " + playerScore, yellow, black);
     }
 
     public void displayPlayerQuitMessage() {
         screen.clear();
-        screen.putString(40, 12, "Thank you for playing!",yellow, black);
-        screen.putString(29, 14, "This window will self destruct in 4 seconds",yellow, black);
+        screen.putString(40, 12, "Thank you for playing!", yellow, black);
+        screen.putString(29, 14, "This window will self destruct in 4 seconds", yellow, black);
         update();
         try {
             for(int i = 3; i >= 0; i--) {
                 Thread.sleep(1000);
-                screen.putString(29, 14, "This window will self destruct in " + i + " seconds",yellow,black);
+                screen.putString(29, 14, "This window will self destruct in " + i + " seconds", yellow, black);
                 update();
             }
             screen.clear();
-            screen.putString(47, 14, "Bye Bye!",yellow,black);
+            screen.putString(47, 14, "Bye Bye!", yellow, black);
             update();
             Thread.sleep(1500);
             screen.stopScreen();
