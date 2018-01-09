@@ -1,5 +1,5 @@
 public class Player {
-    int playerX, playerY, playerSpeed;
+    private int playerX, playerY, playerSpeed;
 
     public Player() {
         playerY = 15;
