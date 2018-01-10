@@ -1,5 +1,5 @@
 public class Player {
-    int playerX, playerY, playerSpeed;
+    private int playerX, playerY, playerSpeed;
 
     public Player() {
         playerY = 15;
@@ -33,6 +33,14 @@ public class Player {
 
     public int getPlayerSpeed() {
         return playerSpeed;
+    }
+
+    public void setPlayerX(int playerX) {
+        this.playerX = playerX;
+    }
+
+    public void setPlayerY(int playerY) {
+        this.playerY = playerY;
     }
 
     public void reset() {
