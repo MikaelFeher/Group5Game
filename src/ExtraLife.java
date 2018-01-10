@@ -21,12 +21,13 @@ public class ExtraLife {
     }
 
     public void renderLife(GameArea gameArea) {
-
         if (extraLives.size() != 0) {
             displayLivesInList();
-            tempLife = extraLives.get(0);
-            gameArea.screen.putString(tempLife.lifeX, tempLife.lifeY, "*", yellow, black);
-            gameArea.update();
+            for (int i = 0; i < extraLives.size(); i++) {
+                tempLife = extraLives.get(i);
+                gameArea.screen.putString(tempLife.lifeX, tempLife.lifeY, "*", yellow, black);
+                gameArea.update();
+            }
         }
     }
 
@@ -43,5 +44,25 @@ public class ExtraLife {
         System.out.println("Lives in list:" + extraLives.size());
         System.out.println("LifeX:" + extraLives.get(0).lifeX);
         System.out.println("LifeY:" + extraLives.get(0).lifeY);
+    }
+
+    public void decreaseDuration() {
+        if (extraLives.size() != 0) {
+            for (int i = 0; i < extraLives.size(); i++) {
+                tempLife = extraLives.get(i);
+                tempLife.duration--;
+                System.out.println("templife " + i + " duration: " + tempLife.duration);
+            }
+        }
+        removeExtraLifeFromListIfNoDuration();
+    }
+
+    private void removeExtraLifeFromListIfNoDuration() {
+        for (int i = 0; i < extraLives.size(); i++) {
+            tempLife = extraLives.get(i);
+            if (tempLife.duration < 1) {
+                extraLives.remove(tempLife);
+            }
+        }
     }
 }

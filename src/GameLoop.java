@@ -171,6 +171,7 @@ public class GameLoop {
                 break;
         }
         playerScore++;
+        extraLife.decreaseDuration();
     }
 
     private void getPlayerPositionAndSpeed() {
