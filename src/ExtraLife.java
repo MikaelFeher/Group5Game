@@ -19,12 +19,13 @@ public class ExtraLife {
         this.duration = 30;
     }
 
-    public void renderLife(Screen screen) {
+    public void renderLife(GameArea gameArea) {
 
         if (extraLives.size() != 0) {
-            diplayLivesInList();
+            displayLivesInList();
             tempLife = extraLives.get(0);
-            screen.putString(tempLife.lifeX, tempLife.lifeY, "*", yellow, black);
+            gameArea.screen.putString(tempLife.lifeX, tempLife.lifeY, "*", yellow, black);
+            gameArea.update();
         }
     }
 
@@ -32,7 +33,7 @@ public class ExtraLife {
         extraLives.add(new ExtraLife());
     }
 
-    public void diplayLivesInList() {
+    public void displayLivesInList() {
         System.out.println("Lives in list:" + extraLives.size());
         System.out.println("LifeX:" + extraLives.get(0).lifeX);
         System.out.println("LifeY:" + extraLives.get(0).lifeY);

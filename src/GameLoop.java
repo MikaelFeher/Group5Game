@@ -40,6 +40,7 @@ public class GameLoop {
         while (!gameOver) {
             screen.clear();
             renderGameAssets();
+            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
@@ -53,7 +54,7 @@ public class GameLoop {
         renderPlayer();
         addMonstersBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
-        extraLife.renderLife(screen);
+        //extraLife.renderLife(screen);
     }
 
     // HANDLING PLAYER INPUT
