@@ -52,9 +52,8 @@ public class GameLoop {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
         renderPlayer();
-        addMonstersBasedOnPlayerScore();
+        addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
-        //extraLife.renderLife(screen);
     }
 
     // HANDLING PLAYER INPUT
@@ -121,19 +120,20 @@ public class GameLoop {
         }
     }
 
+    // STUFF HAPPENS BASED ON PLAYER SCORE SECTION
+    private void addStuffBasedOnPlayerScore() {
+        if (playerScore > 20 && playerScore % 5 == 0) {
+            monsterHandler.addMonster(new Monster(), player);
+            extraLife.addLife();
+        }
+    }
+
     // MONSTER SECTION
     private void createStarterMonsters() {
         int numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
         while (numberOfMonsters < 3) {
             monsterHandler.addMonster(new Monster(), player);
             numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
-        }
-    }
-
-    private void addMonstersBasedOnPlayerScore() {
-        if (playerScore > 20 && playerScore % 5 == 0) {
-            monsterHandler.addMonster(new Monster(), player);
-            extraLife.addLife();
         }
     }
 
@@ -171,8 +171,6 @@ public class GameLoop {
                 break;
         }
         playerScore++;
-        System.out.println("playerScore: " + playerScore);
-
     }
 
     private void getPlayerPositionAndSpeed() {

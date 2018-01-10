@@ -6,16 +6,17 @@ import java.util.Random;
 
 public class ExtraLife {
     private int lifeX, lifeY;
-    private int duration;
+    private int duration, chanceToSpawn;
     private Terminal.Color yellow = Terminal.Color.YELLOW;
     private Terminal.Color black = Terminal.Color.BLACK;
     private ExtraLife tempLife;
+    private Random randNumGen = new Random();
+
     private LinkedList<ExtraLife> extraLives = new LinkedList<>();
 
     public ExtraLife() {
-        Random randomNumber = new Random();
-        this.lifeX = randomNumber.nextInt((38))+31;
-        this.lifeY = randomNumber.nextInt((18))+6;
+        this.lifeX = randNumGen.nextInt((38))+31;
+        this.lifeY = randNumGen.nextInt((18))+6;
         this.duration = 30;
     }
 
@@ -30,7 +31,12 @@ public class ExtraLife {
     }
 
     public void addLife() {
-        extraLives.add(new ExtraLife());
+        chanceToSpawn = randNumGen.nextInt(100);
+        System.out.println("chanceToSpawn: " + chanceToSpawn);
+        if (chanceToSpawn <= 10) {
+            extraLives.add(new ExtraLife());
+            System.out.println("EXTRA LIFE ADDED");
+        }
     }
 
     public void displayLivesInList() {
