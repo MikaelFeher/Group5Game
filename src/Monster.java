@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class Monster extends Character {
     //starts methods to set x-, y-position and speed for monster.
-    public void Monster() {
+    public Monster() {
         setMonsterX();
         setMonsterY();
         setSpeed(1);

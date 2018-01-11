@@ -1,16 +1,18 @@
 public abstract class Character {
-private int x, y, speed;
-public Character(){
-    x=0;
-    y=0;
-    speed=0;
+    private int x, y, speed;
+
+    public Character() {
+        x = 0;
+        y = 0;
+        speed = 0;
     }
 
-public Character(int x, int y, int speed){
-    this.x=x;
-    this.y=y;
-    this.speed=speed;
+    public Character(int x, int y, int speed) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
     }
+
     public void moveUp() {
         this.y -= speed;
     }
@@ -26,11 +28,18 @@ public Character(int x, int y, int speed){
     public void moveRight() {
         this.x += speed;
     }
-    public int getX(int x) { return this.x;}
 
-    public int getY(int y) { return this.y;}
+    public int getX() {
+        return this.x;
+    }
 
-    public int getSpeed(int speed) { return this.speed;}
+    public int getY() {
+        return this.y;
+    }
+
+    public int getSpeed() {
+        return this.speed;
+    }
 
     public void setX(int x) {
         this.x = x;
@@ -40,6 +49,8 @@ public Character(int x, int y, int speed){
         this.y = y;
     }
 
-    public void setSpeed(int speed){this.speed=speed;}
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
 
 }

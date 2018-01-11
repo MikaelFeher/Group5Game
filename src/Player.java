@@ -3,7 +3,7 @@ public class Player extends Character {
 
     //Sets position for player thought super-class constructor.
     public Player() {
-        super(15, 30, 2);
+        super(50, 15, 2);
     }
 
     //Reset player position after death.
