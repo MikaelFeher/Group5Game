@@ -7,6 +7,7 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
+    private ExtraLife extraLife = new ExtraLife();
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
@@ -39,6 +40,7 @@ public class GameLoop {
         while (!gameOver) {
             screen.clear();
             renderGameAssets();
+            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
@@ -50,7 +52,7 @@ public class GameLoop {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
         renderPlayer();
-        addMonstersBasedOnPlayerScore();
+        addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
     }
 
@@ -118,18 +120,20 @@ public class GameLoop {
         }
     }
 
+    // STUFF HAPPENS BASED ON PLAYER SCORE SECTION
+    private void addStuffBasedOnPlayerScore() {
+        if (playerScore > 20 && playerScore % 5 == 0) {
+            monsterHandler.addMonster(new Monster(), player);
+            extraLife.addLife();
+        }
+    }
+
     // MONSTER SECTION
     private void createStarterMonsters() {
         int numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
         while (numberOfMonsters < 3) {
             monsterHandler.addMonster(new Monster(), player);
             numberOfMonsters = monsterHandler.numberOfMonstersInTheList();
-        }
-    }
-
-    private void addMonstersBasedOnPlayerScore() {
-        if (playerScore > 20 && playerScore % 5 == 0) {
-            monsterHandler.addMonster(new Monster(), player);
         }
     }
 
@@ -167,8 +171,7 @@ public class GameLoop {
                 break;
         }
         playerScore++;
-        System.out.println("playerScore: " + playerScore);
-
+        extraLife.decreaseDuration();
     }
 
     private void getPlayerPositionAndSpeed() {
