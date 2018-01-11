@@ -1,16 +1,20 @@
-import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
 public class GameLoop {
     // VARIABLES
-    Player player;
-    MonsterHandler monsterHandler;
-    GameArea gameArea = new GameArea();
+    private Player player;
+    private MonsterHandler monsterHandler;
+    private GameArea gameArea = new GameArea();
+    private ExtraLife extraLife = new ExtraLife();
+
+    // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
+    Screen screen = gameArea.screen;
+
     boolean gameOver;
     int playerX, playerY, playerSpeed;
+    int playerScore, highScore;
 
     // GAME AREA BORDERS
     private int leftBorder = 30, rightBorder = 70;
@@ -24,6 +28,7 @@ public class GameLoop {
     // GAME INITIALIZER
     public void init() {
         player = new Player();
+        playerScore = 0;
         monsterHandler = new MonsterHandler();
         gameOver = false;
         gameArea.gameAreaReset();
@@ -33,21 +38,29 @@ public class GameLoop {
     // ACTUAL GAME LOOP
     public void run() {
         while (!gameOver) {
-            gameArea.screen.clear();
-            gameArea.render();
-            renderPlayer();
-            monsterHandler.renderMonsters(gameArea.screen);
+            screen.clear();
+            renderGameAssets();
+            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
         handleKeyPress();
     }
 
+    // GAME ASSETS - Game area, players, monsters, displaying scores...
+    private void renderGameAssets() {
+        gameArea.render();
+        gameArea.displayPlayerScore(playerScore);
+        renderPlayer();
+        addStuffBasedOnPlayerScore();
+        monsterHandler.renderMonsters(screen);
+    }
+
     // HANDLING PLAYER INPUT
     private void handleKeyPress() {
-        Key key = gameArea.screen.readInput();
+        Key key = screen.readInput();
         while (key == null) {
-            key = gameArea.screen.readInput();
+            key = screen.readInput();
         }
         if (!gameOver) {
             switch (key.getKind()) {
@@ -92,16 +105,7 @@ public class GameLoop {
             resetGame();
         } else if (key.getCharacter() == 'q') {
             gameOver = true;
-            gameArea.screen.clear();
-            gameArea.screen.putString(40, 12, "Thank you for playing!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            gameArea.screen.putString(29, 14, "This window will self destruct in 4 seconds", Terminal.Color.YELLOW, Terminal.Color.BLACK);
-            gameArea.update();
-            try {
-                Thread.sleep(4000);
-                gameArea.screen.stopScreen();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            gameArea.displayPlayerQuitMessage();
         } else if (key.getCharacter() == 'd') {
             monsterHandler.deleteAllMonsters();
             run();
@@ -113,6 +117,14 @@ public class GameLoop {
         gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
         if (gameOver) {
             gameOver();
+        }
+    }
+
+    // STUFF HAPPENS BASED ON PLAYER SCORE SECTION
+    private void addStuffBasedOnPlayerScore() {
+        if (playerScore > 20 && playerScore % 5 == 0) {
+            monsterHandler.addMonster(new Monster(), player);
+            extraLife.addLife();
         }
     }
 
@@ -158,6 +170,8 @@ public class GameLoop {
                 }
                 break;
         }
+        playerScore++;
+        extraLife.decreaseDuration();
     }
 
     private void getPlayerPositionAndSpeed() {
@@ -168,21 +182,35 @@ public class GameLoop {
 
     private void renderPlayer() {
         getPlayerPositionAndSpeed();
-        gameArea.screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
+        screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         gameArea.update();
     }
 
     // HELPER METHODS
     private void gameOver() {
+        boolean newHighScore = calculatingHighScore();
         gameOver = true;
-        gameArea.screen.clear();
+        screen.clear();
         gameArea.render();
-        gameArea.screen.putString(46, 15, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
+        screen.putString(46, 14, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
+        screen.putString(40, 16, "Your final score: " + playerScore, Terminal.Color.RED, Terminal.Color.BLACK);
+        if(newHighScore) {
+            screen.putString(77, 8, "NEW HIGH SCORE!!!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
+        }
+        gameArea.displayCurrentHighScore(highScore);
         gameArea.update();
     }
 
     private void resetGame() {
         init();
         run();
+    }
+
+    private boolean calculatingHighScore() {
+        if (playerScore > highScore) {
+            highScore = playerScore;
+            return true;
+        }
+        return false;
     }
 }

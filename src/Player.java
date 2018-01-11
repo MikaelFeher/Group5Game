@@ -1,3 +1,4 @@
+
 public class Player extends Character {
 
     //Sets position for player thought super-class constructor.

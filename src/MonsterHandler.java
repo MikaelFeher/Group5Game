@@ -4,7 +4,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.util.LinkedList;
 
 public class MonsterHandler {
-    public LinkedList<Monster> monsters = new LinkedList<>();
+    private LinkedList<Monster> monsters = new LinkedList<>();
 
     private Monster tempMonster;
 
