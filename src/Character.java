@@ -39,6 +39,7 @@ public Character(int x, int y, int speed){
     public void setY(int y) {
         this.y = y;
     }
+
     public void setSpeed(int speed){this.speed=speed;}
 
 }
