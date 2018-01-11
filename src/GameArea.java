@@ -3,6 +3,8 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import java.util.Random;
+
 public class GameArea {
 
     private int leftBorder = 30, rightBorder = 70;
