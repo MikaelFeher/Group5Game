@@ -1,49 +1,13 @@
-public class Player {
-    int playerX, playerY, playerSpeed;
+public class Player extends Character {
 
+    //Sets position for player thought super-class constructor.
     public Player() {
-        playerY = 15;
-        playerX = 50;
-        playerSpeed = 2;
+        super(15, 30, 2);
     }
 
-    public void moveUp() {
-        this.playerY -= playerSpeed;
-    }
-
-    public void moveDown() {
-        this.playerY += playerSpeed;
-    }
-
-    public void moveLeft() {
-        this.playerX -= playerSpeed;
-    }
-
-    public void moveRight() {
-        this.playerX += playerSpeed;
-    }
-
-    public int getPlayerX() {
-        return playerX;
-    }
-
-    public int getPlayerY() {
-        return playerY;
-    }
-
-    public int getPlayerSpeed() {
-        return playerSpeed;
-    }
-
-    public void setPlayerX(int playerX) {
-        this.playerX = playerX;
-    }
-
-    public void setPlayerY(int playerY) {
-        this.playerY = playerY;
-    }
-
+    //Reset player position after death.
     public void reset() {
+        int playerX, playerY;
         playerY = 15;
         playerX = 50;
     }
