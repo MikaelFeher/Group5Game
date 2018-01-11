@@ -5,12 +5,13 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 public class GameArea {
 
-    private int leftBorder = 30,rightBorder = 70;
-    private int topBorder = 5,bottomBorder =25;
+    private int leftBorder = 30, rightBorder = 70;
+    private int topBorder = 5, bottomBorder = 25;
     private Terminal.Color green = Terminal.Color.GREEN;
     private Terminal.Color black = Terminal.Color.BLACK;
     private Terminal.Color yellow = Terminal.Color.YELLOW;
     private String borderCharacter = "*";
+    private GameSounds gameSounds = new GameSounds();
 
     public int getTopBorder() {
         return topBorder;
@@ -70,21 +71,28 @@ public class GameArea {
     }
 
     public void displayPlayerQuitMessage() {
-        screen.clear();
-        screen.putString(40, 12, "Thank you for playing!", yellow, black);
-        screen.putString(29, 14, "This window will self destruct in 4 seconds", yellow, black);
-        update();
-        try {
-            for(int i = 3; i >= 0; i--) {
-                Thread.sleep(1000);
-                screen.putString(29, 14, "This window will self destruct in " + i + " seconds", yellow, black);
-                update();
-            }
+        for (int i = 3; i >= 0; i--) {
+            sleep(1000);
+            gameSounds.escCounterSound();
             screen.clear();
-            screen.putString(47, 14, "Bye Bye!", yellow, black);
+            screen.putString(40, 12, "Thank you for playing!", yellow, black);
+            screen.putString(29, 14, "This window will self destruct in " + i + " seconds", yellow, black);
             update();
-            Thread.sleep(1500);
-            screen.stopScreen();
+        }
+        screen.clear();
+        screen.putString(47, 14, "Bye Bye!", yellow, black);
+        update();
+        sleep(1500);
+        gameSounds.escBoom();
+        screen.stopScreen();
+        update();
+        screen.stopScreen();
+
+    }
+
+    public void sleep(int milliSec) {
+        try {
+            Thread.sleep(milliSec);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

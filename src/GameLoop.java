@@ -7,6 +7,7 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
+    private GameSounds gameSounds = new GameSounds();
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
@@ -26,6 +27,7 @@ public class GameLoop {
 
     // GAME INITIALIZER
     public void init() {
+        gameSounds.gameMusic();
         player = new Player();
         playerScore = 0;
         monsterHandler = new MonsterHandler();
@@ -63,24 +65,28 @@ public class GameLoop {
         if (!gameOver) {
             switch (key.getKind()) {
                 case ArrowUp:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("up");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
                     run();
                     break;
                 case ArrowDown:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("down");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
                     run();
                     break;
                 case ArrowLeft:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("left");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
                     run();
                     break;
                 case ArrowRight:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("right");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
@@ -90,11 +96,12 @@ public class GameLoop {
                     handleNormalKeys(key);
                     break;
             }
-        }
-        switch (key.getKind()) {
-            case NormalKey:
-                handleNormalKeys(key);
-                break;
+        }else {
+            switch (key.getKind()) {
+                case NormalKey:
+                    handleNormalKeys(key);
+                    break;
+            }
         }
     }
 
@@ -114,6 +121,7 @@ public class GameLoop {
     private void collisionDetection() {
         gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
         if (gameOver) {
+            gameSounds.playerDeathSound();
             gameOver();
         }
     }
