@@ -49,6 +49,7 @@ public class GameLoop {
     private void renderGameAssets() {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
+        gameArea.displayPlayerLife(player);
         renderPlayer();
         addMonstersBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);

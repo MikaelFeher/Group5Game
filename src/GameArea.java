@@ -69,6 +69,10 @@ public class GameArea {
         screen.putString(73, 6, "Score: " + playerScore, yellow, black);
     }
 
+    public void displayPlayerLife(Player player) {
+        screen.putString(73, 8, "Lives: " + player.getPlayerLife(), yellow, black);
+    }
+
     public void displayPlayerQuitMessage() {
         screen.clear();
         screen.putString(40, 12, "Thank you for playing!", yellow, black);
