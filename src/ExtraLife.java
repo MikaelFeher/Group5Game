@@ -15,8 +15,8 @@ public class ExtraLife {
     private LinkedList<ExtraLife> extraLives = new LinkedList<>();
 
     public ExtraLife() {
-        this.lifeX = randNumGen.nextInt((38))+31;
-        this.lifeY = randNumGen.nextInt((18))+6;
+        this.lifeX = randNumGen.nextInt((38)) + 31;
+        this.lifeY = randNumGen.nextInt((18)) + 6;
         this.duration = 30;
     }
 
@@ -67,9 +67,9 @@ public class ExtraLife {
     }
 
     public boolean collisionDetectionPlayerVsExtraLife(Player player) {
-        int pX = player.getPlayerX();
-        int pY = player.getPlayerY();
-        int pSpeed = player.getPlayerSpeed();
+        int pX = player.getX();
+        int pY = player.getY();
+        int pSpeed = player.getSpeed();
         int lifeX, lifeY;
         boolean pickUpMovingLeft, pickUpMovingRight, pickUpMovingUp, pickUpMovingDown;
 
@@ -86,7 +86,7 @@ public class ExtraLife {
             // Player move down
             pickUpMovingDown = (pY + pSpeed == lifeY && pX == lifeX) || (pY + pSpeed == lifeY + 1 && pX == lifeX);
 
-            if(pickUpMovingLeft || pickUpMovingRight || pickUpMovingUp || pickUpMovingDown){
+            if (pickUpMovingLeft || pickUpMovingRight || pickUpMovingUp || pickUpMovingDown) {
                 extraLives.remove(tempLife);
                 return true;
             }
@@ -101,11 +101,4 @@ public class ExtraLife {
     public int getLifeY() {
         return lifeY;
     }
-
-    //    public int getX() {
-//        for (int i = 0; i < extraLives.size(); i++) {
-//            tempLife = extraLives.get(i);
-//        }
-//        return x;
-//    }
 }
