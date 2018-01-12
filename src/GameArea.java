@@ -3,6 +3,8 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
+import java.util.Random;
+
 public class GameArea {
 
     private int leftBorder = 30,rightBorder = 70;
@@ -67,10 +69,6 @@ public class GameArea {
 
     public void displayPlayerScore(int playerScore) {
         screen.putString(73, 6, "Score: " + playerScore, yellow, black);
-    }
-
-    public void displayPlayerLife(Player player) {
-        screen.putString(73, 8, "Lives: " + player.getPlayerLife(), yellow, black);
     }
 
     public void displayPlayerQuitMessage() {

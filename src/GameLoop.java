@@ -7,6 +7,7 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
+    private ExtraLife extraLife = new ExtraLife();
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
@@ -16,8 +17,8 @@ public class GameLoop {
     int playerScore, highScore;
 
     // GAME AREA BORDERS
-    private int leftBorder = 30, rightBorder = 70;
-    private int topBorder = 5, bottomBorder = 25;
+    private int leftBorder = gameArea.getLeftBorder(), rightBorder = gameArea.getRightBorder();
+    private int topBorder = gameArea.getTopBorder(), bottomBorder = gameArea.getBottomBorder();
 
     // CONSTRUCTOR
     public GameLoop() {
@@ -39,6 +40,7 @@ public class GameLoop {
         while (!gameOver) {
             screen.clear();
             renderGameAssets();
+            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
@@ -49,9 +51,8 @@ public class GameLoop {
     private void renderGameAssets() {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
-        gameArea.displayPlayerLife(player);
         renderPlayer();
-        addMonstersBasedOnPlayerScore();
+        addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
     }
 
@@ -113,12 +114,17 @@ public class GameLoop {
 
     // COLLISION DETECTION
     private void collisionDetection() {
-        boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
-        if (collision && player.getPlayerLife() > 0) {
-            player.playerLooseLife();
-            player.reset();
-        } else if (collision && player.getPlayerLife() == 0) {
+        gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+        if (gameOver) {
             gameOver();
+        }
+    }
+
+    // STUFF HAPPENS BASED ON PLAYER SCORE SECTION
+    private void addStuffBasedOnPlayerScore() {
+        if (playerScore > 20 && playerScore % 5 == 0) {
+            monsterHandler.addMonster(new Monster(), player);
+            extraLife.addLife();
         }
     }
 
@@ -131,54 +137,47 @@ public class GameLoop {
         }
     }
 
-    private void addMonstersBasedOnPlayerScore() {
-        if (playerScore > 20 && playerScore % 5 == 0) {
-            monsterHandler.addMonster(new Monster(), player);
-        }
-    }
-
     // PLAYER SECTION
     private void handlePlayerMovement(String direction) {
         getPlayerPositionAndSpeed();
         switch (direction) {
             case "up":
                 if (playerY - playerSpeed <= topBorder) {
-                    player.setPlayerY(topBorder + 1);
+                    player.setY(topBorder + 1);
                 } else {
                     player.moveUp();
                 }
                 break;
             case "down":
                 if (playerY + playerSpeed >= bottomBorder) {
-                    player.setPlayerY(bottomBorder - 1);
+                    player.setY(bottomBorder - 1);
                 } else {
                     player.moveDown();
                 }
                 break;
             case "left":
                 if (playerX - playerSpeed <= leftBorder) {
-                    player.setPlayerX(leftBorder + 1);
+                    player.setX(leftBorder + 1);
                 } else {
                     player.moveLeft();
                 }
                 break;
             case "right":
                 if (playerX + playerSpeed >= rightBorder) {
-                    player.setPlayerX(rightBorder - 1);
+                    player.setX(rightBorder - 1);
                 } else {
                     player.moveRight();
                 }
                 break;
         }
         playerScore++;
-        System.out.println("playerScore: " + playerScore);
-
+        extraLife.decreaseDuration();
     }
 
     private void getPlayerPositionAndSpeed() {
-        playerX = player.getPlayerX();
-        playerY = player.getPlayerY();
-        playerSpeed = player.getPlayerSpeed();
+        playerX = player.getX();
+        playerY = player.getY();
+        playerSpeed = player.getSpeed();
     }
 
     private void renderPlayer() {
