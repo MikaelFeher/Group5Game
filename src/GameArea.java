@@ -5,6 +5,10 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.util.Random;
 
+import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Blinking;
+import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Bold;
+import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Underline;
+
 public class GameArea {
 
     private int leftBorder = 30,rightBorder = 70;
@@ -12,6 +16,8 @@ public class GameArea {
     private Terminal.Color green = Terminal.Color.GREEN;
     private Terminal.Color black = Terminal.Color.BLACK;
     private Terminal.Color yellow = Terminal.Color.YELLOW;
+    private Terminal.Color cyan = Terminal.Color.CYAN;
+    private Terminal.Color red = Terminal.Color.RED;
     private String borderCharacter = "*";
 
     public int getTopBorder() {
@@ -50,8 +56,18 @@ public class GameArea {
         }
 
         screen.putString(33, 27, " [N] NEW GAME             [Q] QUIT", green, black);
-
+        displayGameInstructions();
         update();
+    }
+
+    private void displayGameInstructions() {
+        screen.putString(1, 1, "Instructions", cyan, black, ScreenCharacterStyle.Bold);
+        screen.putString(1, 5, "Use arrow keys to move.", cyan, black);
+        screen.putString(1, 3, "Don't let the monsters get you.", cyan, black);
+        screen.putString(1, 7, "M", red, black);
+        screen.putString(2, 7, " - Monster. RUN AWAY", cyan, black);
+        screen.putString(1, 9, "*", yellow, black);
+        screen.putString(2, 9, " - Extra life. Hurry up...", cyan, black, Blinking);
     }
 
     public void update() {
