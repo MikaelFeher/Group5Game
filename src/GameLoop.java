@@ -7,7 +7,7 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
-    private ExtraLife extraLife;
+    private ExtraLife extraLife = new ExtraLife();
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
@@ -15,11 +15,10 @@ public class GameLoop {
     boolean gameOver;
     int playerX, playerY, playerSpeed;
     int playerScore, highScore;
-    int playerLives;  // TEMPORARY until player lives are ACTUALLY implemented
 
     // GAME AREA BORDERS
-    private int leftBorder = 30, rightBorder = 70;
-    private int topBorder = 5, bottomBorder = 25;
+    private int leftBorder = gameArea.getLeftBorder(), rightBorder = gameArea.getRightBorder();
+    private int topBorder = gameArea.getTopBorder(), bottomBorder = gameArea.getBottomBorder();
 
     // CONSTRUCTOR
     public GameLoop() {
@@ -30,9 +29,7 @@ public class GameLoop {
     public void init() {
         player = new Player();
         playerScore = 0;
-        playerLives = 3;   // TEMPORARY until player lives are ACTUALLY implemented
         monsterHandler = new MonsterHandler();
-        extraLife = new ExtraLife();
         gameOver = false;
         gameArea.gameAreaReset();
         createStarterMonsters();
@@ -53,7 +50,7 @@ public class GameLoop {
     private void renderGameAssets() {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
-        gameArea.displayPlayerLives(playerLives);
+        gameArea.displayPlayerLives(player);
         renderPlayer();
         addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
@@ -72,28 +69,24 @@ public class GameLoop {
                     handlePlayerMovement("up");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
-                    pickUpExtraLife();
                     run();
                     break;
                 case ArrowDown:
                     handlePlayerMovement("down");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
-                    pickUpExtraLife();
                     run();
                     break;
                 case ArrowLeft:
                     handlePlayerMovement("left");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
-                    pickUpExtraLife();
                     run();
                     break;
                 case ArrowRight:
                     handlePlayerMovement("right");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
-                    pickUpExtraLife();
                     run();
                     break;
                 case NormalKey:
@@ -122,9 +115,12 @@ public class GameLoop {
 
     // COLLISION DETECTION
     private void collisionDetection() {
-        gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
-        if (gameOver) {
+        boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+        if (collision && player.getPlayerLife() == 1) {
             gameOver();
+        } else if (collision && player.getPlayerLife() > 0) {
+            player.playerLooseLife();
+            player.reset();
         }
     }
 
@@ -151,28 +147,28 @@ public class GameLoop {
         switch (direction) {
             case "up":
                 if (playerY - playerSpeed <= topBorder) {
-                    player.setPlayerY(topBorder + 1);
+                    player.setY(topBorder + 1);
                 } else {
                     player.moveUp();
                 }
                 break;
             case "down":
                 if (playerY + playerSpeed >= bottomBorder) {
-                    player.setPlayerY(bottomBorder - 1);
+                    player.setY(bottomBorder - 1);
                 } else {
                     player.moveDown();
                 }
                 break;
             case "left":
                 if (playerX - playerSpeed <= leftBorder) {
-                    player.setPlayerX(leftBorder + 1);
+                    player.setX(leftBorder + 1);
                 } else {
                     player.moveLeft();
                 }
                 break;
             case "right":
                 if (playerX + playerSpeed >= rightBorder) {
-                    player.setPlayerX(rightBorder - 1);
+                    player.setX(rightBorder - 1);
                 } else {
                     player.moveRight();
                 }
@@ -183,22 +179,15 @@ public class GameLoop {
     }
 
     private void getPlayerPositionAndSpeed() {
-        playerX = player.getPlayerX();
-        playerY = player.getPlayerY();
-        playerSpeed = player.getPlayerSpeed();
+        playerX = player.getX();
+        playerY = player.getY();
+        playerSpeed = player.getSpeed();
     }
 
     private void renderPlayer() {
         getPlayerPositionAndSpeed();
         screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         gameArea.update();
-    }
-
-    private void pickUpExtraLife() {
-        boolean pickingUpExtraLife = extraLife.collisionDetectionPlayerVsExtraLife(player);
-        if (pickingUpExtraLife) {
-            playerLives++;  // TEMPORARY until player lives are ACTUALLY implemented
-        }
     }
 
     // HELPER METHODS

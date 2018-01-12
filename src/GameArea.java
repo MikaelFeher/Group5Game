@@ -70,6 +70,10 @@ public class GameArea {
     public void displayPlayerScore(int playerScore) {
         screen.putString(73, 6, "Score: " + playerScore, yellow, black);
     }
+    public void displayPlayerLives(Player player) {
+        screen.putString(73, 8, "Lives: " + player.getPlayerLife(), yellow, black);
+        update();
+    }
 
     public void displayPlayerLives(int playerLives) {
         screen.putString(73, 8, "Lives: " + playerLives, yellow, black);
