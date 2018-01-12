@@ -17,8 +17,8 @@ public class GameLoop {
     int playerScore, highScore;
 
     // GAME AREA BORDERS
-    private int leftBorder = 30, rightBorder = 70;
-    private int topBorder = 5, bottomBorder = 25;
+    private int leftBorder = gameArea.getLeftBorder(), rightBorder = gameArea.getRightBorder();
+    private int topBorder = gameArea.getTopBorder(), bottomBorder = gameArea.getBottomBorder();
 
     // CONSTRUCTOR
     public GameLoop() {
@@ -143,28 +143,28 @@ public class GameLoop {
         switch (direction) {
             case "up":
                 if (playerY - playerSpeed <= topBorder) {
-                    player.setPlayerY(topBorder + 1);
+                    player.setY(topBorder + 1);
                 } else {
                     player.moveUp();
                 }
                 break;
             case "down":
                 if (playerY + playerSpeed >= bottomBorder) {
-                    player.setPlayerY(bottomBorder - 1);
+                    player.setY(bottomBorder - 1);
                 } else {
                     player.moveDown();
                 }
                 break;
             case "left":
                 if (playerX - playerSpeed <= leftBorder) {
-                    player.setPlayerX(leftBorder + 1);
+                    player.setX(leftBorder + 1);
                 } else {
                     player.moveLeft();
                 }
                 break;
             case "right":
                 if (playerX + playerSpeed >= rightBorder) {
-                    player.setPlayerX(rightBorder - 1);
+                    player.setX(rightBorder - 1);
                 } else {
                     player.moveRight();
                 }
@@ -175,9 +175,9 @@ public class GameLoop {
     }
 
     private void getPlayerPositionAndSpeed() {
-        playerX = player.getPlayerX();
-        playerY = player.getPlayerY();
-        playerSpeed = player.getPlayerSpeed();
+        playerX = player.getX();
+        playerY = player.getY();
+        playerSpeed = player.getSpeed();
     }
 
     private void renderPlayer() {

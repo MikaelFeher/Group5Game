@@ -1,31 +1,24 @@
 import java.util.Random;
-public class Monster {
-    private int monsterX, monsterY, monsterSpeed;
+
+public class Monster extends Character {
+    //starts methods to set x-, y-position and speed for monster.
     public Monster() {
+        setMonsterX();
+        setMonsterY();
+        setSpeed(1);
+
+    }
+    //generates x-value and sends it to super class
+    public void setMonsterX() {
         Random randomNumber = new Random();
-        monsterX = randomNumber.nextInt((38))+31;
-        monsterY = randomNumber.nextInt((18))+6;
-        monsterSpeed = 1;
+        int x = randomNumber.nextInt((38)) + 31;
+        super.setX(x);
     }
-    public void moveUp() {
-        this.monsterY -= monsterSpeed;
+    //generates y-value and sends it to super class
+    public void setMonsterY() {
+        Random randomNumber = new Random();
+        int y = randomNumber.nextInt((18)) + 6;
+        super.setY(y);
     }
-    public void moveDown() {
-        this.monsterY += monsterSpeed;
-    }
-    public void moveLeft() {
-        this.monsterX -= monsterSpeed;
-    }
-    public void moveRight() {
-        this.monsterX += monsterSpeed;
-    }
-    public int getMonsterX() {
-        return monsterX;
-    }
-    public int getMonsterY() {
-        return monsterY;
-    }
-    public int getMonsterSpeed() {
-        return monsterSpeed;
-    }
+
 }
