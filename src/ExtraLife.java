@@ -65,4 +65,47 @@ public class ExtraLife {
             }
         }
     }
+
+    public boolean collisionDetectionPlayerVsExtraLife(Player player) {
+        int pX = player.getPlayerX();
+        int pY = player.getPlayerY();
+        int pSpeed = player.getPlayerSpeed();
+        int lifeX, lifeY;
+        boolean pickUpMovingLeft, pickUpMovingRight, pickUpMovingUp, pickUpMovingDown;
+
+        for (int i = 0; i < extraLives.size(); i++) {
+            tempLife = extraLives.get(i);
+            lifeX = tempLife.getLifeX();
+            lifeY = tempLife.getLifeY();
+            // Player move left
+            pickUpMovingLeft = pX + pSpeed == lifeX && pY == lifeY || pX + pSpeed == lifeX + 1 && pY == lifeY;
+            // Player move right
+            pickUpMovingRight = pX - pSpeed == lifeX && pY == lifeY || pX - pSpeed == lifeX - 1 && pY == lifeY;
+            // Player move up
+            pickUpMovingUp = pY - pSpeed == lifeY && pX == lifeX || pY - pSpeed == lifeY - 1 && pX == lifeX;
+            // Player move down
+            pickUpMovingDown = pY + pSpeed == lifeY && pX == lifeX || pY + pSpeed == lifeY + 1 && pX == lifeX;
+
+            if(pickUpMovingLeft || pickUpMovingRight || pickUpMovingUp || pickUpMovingDown){
+                extraLives.remove(tempLife);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getLifeX() {
+        return lifeX;
+    }
+
+    public int getLifeY() {
+        return lifeY;
+    }
+
+    //    public int getX() {
+//        for (int i = 0; i < extraLives.size(); i++) {
+//            tempLife = extraLives.get(i);
+//        }
+//        return x;
+//    }
 }

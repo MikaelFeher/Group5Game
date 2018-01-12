@@ -7,7 +7,7 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
-    private ExtraLife extraLife = new ExtraLife();
+    private ExtraLife extraLife;
 
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
@@ -15,6 +15,7 @@ public class GameLoop {
     boolean gameOver;
     int playerX, playerY, playerSpeed;
     int playerScore, highScore;
+    int playerLives;  // TEMPORARY until player lives are ACTUALLY implemented
 
     // GAME AREA BORDERS
     private int leftBorder = 30, rightBorder = 70;
@@ -29,7 +30,9 @@ public class GameLoop {
     public void init() {
         player = new Player();
         playerScore = 0;
+        playerLives = 3;   // TEMPORARY until player lives are ACTUALLY implemented
         monsterHandler = new MonsterHandler();
+        extraLife = new ExtraLife();
         gameOver = false;
         gameArea.gameAreaReset();
         createStarterMonsters();
@@ -40,7 +43,6 @@ public class GameLoop {
         while (!gameOver) {
             screen.clear();
             renderGameAssets();
-            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
@@ -51,9 +53,11 @@ public class GameLoop {
     private void renderGameAssets() {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
+        gameArea.displayPlayerLives(playerLives);
         renderPlayer();
         addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
+        extraLife.renderLife(gameArea);
     }
 
     // HANDLING PLAYER INPUT
@@ -68,24 +72,28 @@ public class GameLoop {
                     handlePlayerMovement("up");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
+                    pickUpExtraLife();
                     run();
                     break;
                 case ArrowDown:
                     handlePlayerMovement("down");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
+                    pickUpExtraLife();
                     run();
                     break;
                 case ArrowLeft:
                     handlePlayerMovement("left");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
+                    pickUpExtraLife();
                     run();
                     break;
                 case ArrowRight:
                     handlePlayerMovement("right");
                     monsterHandler.handleMovement(player);
                     collisionDetection();
+                    pickUpExtraLife();
                     run();
                     break;
                 case NormalKey:
@@ -184,6 +192,15 @@ public class GameLoop {
         getPlayerPositionAndSpeed();
         screen.putString(playerX, playerY, "X", Terminal.Color.MAGENTA, Terminal.Color.BLACK);
         gameArea.update();
+    }
+
+    private void pickUpExtraLife() {
+        boolean pickingUpExtraLife = extraLife.collisionDetectionPlayerVsExtraLife(player);
+        if (pickingUpExtraLife) {
+            playerLives++;  // TEMPORARY until player lives are ACTUALLY implemented
+            System.out.println("pickingUpExtraLife: " + pickingUpExtraLife);
+            System.out.println("Extra life picked up!!!");
+        }
     }
 
     // HELPER METHODS
