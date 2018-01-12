@@ -8,6 +8,7 @@ import java.util.Random;
 import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Blinking;
 import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Bold;
 import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Underline;
+import static com.googlecode.lanterna.screen.ScreenCharacterStyle.Reverse;
 
 public class GameArea {
 
@@ -55,19 +56,23 @@ public class GameArea {
             screen.putString(rightBorder, j, borderCharacter, green, black);
         }
 
-        screen.putString(33, 27, " [N] NEW GAME             [Q] QUIT", green, black);
-        displayGameInstructions();
+        screen.putString(30, 27, "[N] NEW GAME  [I] INSTRUCTIONS  [Q] QUIT", green, black);
+//        displayGameInstructions();
         update();
     }
 
-    private void displayGameInstructions() {
-        screen.putString(1, 1, "Instructions", cyan, black, ScreenCharacterStyle.Bold);
-        screen.putString(1, 5, "Use arrow keys to move.", cyan, black);
-        screen.putString(1, 3, "Don't let the monsters get you.", cyan, black);
-        screen.putString(1, 7, "M", red, black);
-        screen.putString(2, 7, " - Monster. RUN AWAY", cyan, black);
-        screen.putString(1, 9, "*", yellow, black);
-        screen.putString(2, 9, " - Extra life. Hurry up...", cyan, black, Blinking);
+    public void displayGameInstructions(boolean show) {
+        if (show) {
+            screen.putString(1, 8, "Instructions", cyan, black, Bold, Underline);
+            screen.putString(1, 10, "Use arrow keys to move.", cyan, black);
+            screen.putString(1, 12, "M", red, black);
+            screen.putString(2, 12, " - Monster. RUN AWAY", cyan, black);
+            screen.putString(1, 14, "*", yellow, black);
+            screen.putString(2, 14, " - Extra life. Hurry up...", cyan, black);
+            update();
+        } else {
+            render();
+        }
     }
 
     public void update() {
@@ -85,10 +90,30 @@ public class GameArea {
 
     public void displayPlayerScore(int playerScore) {
         screen.putString(73, 6, "Score: " + playerScore, yellow, black);
+        update();
     }
     public void displayPlayerLives(Player player) {
         screen.putString(73, 8, "Lives: " + player.getPlayerLife(), yellow, black);
         update();
+    }
+
+    public void displayPlayerDeathMessage(Player player) {
+        displayPlayerScore(player.getPlayerLife());
+        try {
+            for (int j = 6; j < 25; j++){
+                for (int i = 31; i < 70; i++) {
+                    screen.putString(i, j, " ", red, red);
+                }
+            }
+            screen.putString(38, 14, " Oh no, a monster got you! ", red, black);
+            screen.putString(44, 16, " " + player.getPlayerLife() + " lives left ", red, black);
+            update();
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        screen.clear();
+        render();
     }
 
     public void displayPlayerQuitMessage() {

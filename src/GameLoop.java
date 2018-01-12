@@ -12,7 +12,7 @@ public class GameLoop {
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
 
-    boolean gameOver;
+    boolean gameOver, showInstructions;
     int playerX, playerY, playerSpeed;
     int playerScore, highScore;
 
@@ -31,6 +31,7 @@ public class GameLoop {
         playerScore = 0;
         monsterHandler = new MonsterHandler();
         gameOver = false;
+        showInstructions = true;
         gameArea.gameAreaReset();
         createStarterMonsters();
     }
@@ -52,6 +53,7 @@ public class GameLoop {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
         gameArea.displayPlayerLives(player);
+        gameArea.displayGameInstructions(showInstructions);
         renderPlayer();
         addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
@@ -107,6 +109,10 @@ public class GameLoop {
         } else if (key.getCharacter() == 'q') {
             gameOver = true;
             gameArea.displayPlayerQuitMessage();
+        } else if (key.getCharacter() == 'i') {
+            showInstructions = !showInstructions;
+            gameArea.displayGameInstructions(showInstructions);
+            run();
         } else if (key.getCharacter() == 'd') {
             monsterHandler.deleteAllMonsters();
             run();
@@ -116,11 +122,18 @@ public class GameLoop {
     // COLLISION DETECTION
     private void collisionDetection() {
         boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+
         if (collision && player.getPlayerLife() == 1) {
             gameOver();
         } else if (collision && player.getPlayerLife() > 0) {
+
             player.playerLooseLife();
+            gameArea.displayPlayerDeathMessage(player);
             player.reset();
+        } else {
+            // Needs to be here otherwise the player's score increases even if player dies...
+            playerScore++;
+            extraLife.decreaseDuration();
         }
     }
 
@@ -174,8 +187,8 @@ public class GameLoop {
                 }
                 break;
         }
-        playerScore++;
-        extraLife.decreaseDuration();
+//        playerScore++;
+//        extraLife.decreaseDuration();
     }
 
     private void getPlayerPositionAndSpeed() {
