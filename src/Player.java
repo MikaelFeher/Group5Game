@@ -61,6 +61,8 @@ public class Player {
     }
 
     public void playerWinLife() {
-        playerLife++;
+        if(playerLife < 3) {
+            playerLife++;
+        }
     }
 }

@@ -116,6 +116,7 @@ public class GameLoop {
         boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
         if (collision && player.getPlayerLife() > 0) {
             player.playerLooseLife();
+            player.reset();
         } else if (collision && player.getPlayerLife() == 0) {
             gameOver();
         }
