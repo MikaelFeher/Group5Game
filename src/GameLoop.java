@@ -198,8 +198,6 @@ public class GameLoop {
         boolean pickingUpExtraLife = extraLife.collisionDetectionPlayerVsExtraLife(player);
         if (pickingUpExtraLife) {
             playerLives++;  // TEMPORARY until player lives are ACTUALLY implemented
-            System.out.println("pickingUpExtraLife: " + pickingUpExtraLife);
-            System.out.println("Extra life picked up!!!");
         }
     }
 

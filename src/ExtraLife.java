@@ -77,14 +77,14 @@ public class ExtraLife {
             tempLife = extraLives.get(i);
             lifeX = tempLife.getLifeX();
             lifeY = tempLife.getLifeY();
-            // Player move left
-            pickUpMovingLeft = pX + pSpeed == lifeX && pY == lifeY || pX + pSpeed == lifeX + 1 && pY == lifeY;
             // Player move right
-            pickUpMovingRight = pX - pSpeed == lifeX && pY == lifeY || pX - pSpeed == lifeX - 1 && pY == lifeY;
+            pickUpMovingRight = (pX + pSpeed == lifeX && pY == lifeY) || (pX + pSpeed == lifeX + 1 && pY == lifeY);
+            // Player move left
+            pickUpMovingLeft = (pX - pSpeed == lifeX && pY == lifeY) || (pX - pSpeed == lifeX - 1 && pY == lifeY);
             // Player move up
-            pickUpMovingUp = pY - pSpeed == lifeY && pX == lifeX || pY - pSpeed == lifeY - 1 && pX == lifeX;
+            pickUpMovingUp = (pY - pSpeed == lifeY && pX == lifeX) || (pY - pSpeed == lifeY - 1 && pX == lifeX);
             // Player move down
-            pickUpMovingDown = pY + pSpeed == lifeY && pX == lifeX || pY + pSpeed == lifeY + 1 && pX == lifeX;
+            pickUpMovingDown = (pY + pSpeed == lifeY && pX == lifeX) || (pY + pSpeed == lifeY + 1 && pX == lifeX);
 
             if(pickUpMovingLeft || pickUpMovingRight || pickUpMovingUp || pickUpMovingDown){
                 extraLives.remove(tempLife);
