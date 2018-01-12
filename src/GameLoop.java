@@ -29,6 +29,7 @@ public class GameLoop {
     public void init() {
         player = new Player();
         playerScore = 0;
+        extraLife.removeAllExtraLives();
         monsterHandler = new MonsterHandler();
         gameOver = false;
         showInstructions = true;
