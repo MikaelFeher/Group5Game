@@ -51,6 +51,7 @@ public class GameLoop {
     private void renderGameAssets() {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
+        gameArea.displayPlayerLives(player);
         renderPlayer();
         addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
@@ -114,9 +115,12 @@ public class GameLoop {
 
     // COLLISION DETECTION
     private void collisionDetection() {
-        gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
-        if (gameOver) {
+        boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+        if (collision && player.getPlayerLife() == 1) {
             gameOver();
+        } else if (collision && player.getPlayerLife() > 0) {
+            player.playerLooseLife();
+            player.reset();
         }
     }
 
