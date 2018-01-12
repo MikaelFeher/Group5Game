@@ -7,12 +7,8 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
-<<<<<<< HEAD
     private GameSounds gameSounds = new GameSounds();
-=======
     private ExtraLife extraLife = new ExtraLife();
->>>>>>> 5884b35eb7307cbc04e73cd56f7a1bf928af719e
-
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
     Screen screen = gameArea.screen;
 
@@ -31,6 +27,7 @@ public class GameLoop {
 
     // GAME INITIALIZER
     public void init() {
+        gameSounds.stopMusic();
         gameSounds.gameMusic();
         player = new Player();
         playerScore = 0;
@@ -114,6 +111,7 @@ public class GameLoop {
         if (key.getCharacter() == 'n') {
             resetGame();
         } else if (key.getCharacter() == 'q') {
+            gameSounds.stopMusic();
             gameOver = true;
             gameArea.displayPlayerQuitMessage();
         } else if (key.getCharacter() == 'd') {
@@ -199,6 +197,7 @@ public class GameLoop {
 
     // HELPER METHODS
     private void gameOver() {
+        gameSounds.stopMusic();
         boolean newHighScore = calculatingHighScore();
         gameOver = true;
         screen.clear();
