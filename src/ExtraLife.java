@@ -101,4 +101,8 @@ public class ExtraLife {
     public int getLifeY() {
         return lifeY;
     }
+
+    public void removeAllExtraLives() {
+        extraLives.clear();
+    }
 }

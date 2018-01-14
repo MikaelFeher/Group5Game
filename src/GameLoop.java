@@ -7,18 +7,25 @@ public class GameLoop {
     private Player player;
     private MonsterHandler monsterHandler;
     private GameArea gameArea = new GameArea();
+    private GameSounds gameSounds = new GameSounds();
     private ExtraLife extraLife = new ExtraLife();
 
+    // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
+
+
     // Removes the need for extra methods in the gameArea class...
+
     Screen screen = gameArea.screen;
 
     boolean gameOver;
     int playerX, playerY, playerSpeed;
     int playerScore, highScore;
 
+
     // GAME AREA BORDERS
     private int leftBorder = gameArea.getLeftBorder(), rightBorder = gameArea.getRightBorder();
     private int topBorder = gameArea.getTopBorder(), bottomBorder = gameArea.getBottomBorder();
+
 
     // CONSTRUCTOR
     public GameLoop() {
@@ -27,8 +34,11 @@ public class GameLoop {
 
     // GAME INITIALIZER
     public void init() {
+        gameSounds.stopMusic();
+        gameSounds.gameMusic();
         player = new Player();
         playerScore = 0;
+        extraLife.removeAllExtraLives();
         monsterHandler = new MonsterHandler();
         gameOver = false;
         gameArea.gameAreaReset();
@@ -66,6 +76,7 @@ public class GameLoop {
         if (!gameOver) {
             switch (key.getKind()) {
                 case ArrowUp:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("up");
                     monsterHandler.handleMovement(player);
                     pickUpExtraLives();
@@ -73,6 +84,7 @@ public class GameLoop {
                     run();
                     break;
                 case ArrowDown:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("down");
                     monsterHandler.handleMovement(player);
                     pickUpExtraLives();
@@ -80,6 +92,7 @@ public class GameLoop {
                     run();
                     break;
                 case ArrowLeft:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("left");
                     monsterHandler.handleMovement(player);
                     pickUpExtraLives();
@@ -87,6 +100,7 @@ public class GameLoop {
                     run();
                     break;
                 case ArrowRight:
+                    gameSounds.playerStepsSound();
                     handlePlayerMovement("right");
                     monsterHandler.handleMovement(player);
                     pickUpExtraLives();
@@ -97,11 +111,12 @@ public class GameLoop {
                     handleNormalKeys(key);
                     break;
             }
-        }
-        switch (key.getKind()) {
-            case NormalKey:
-                handleNormalKeys(key);
-                break;
+        }else {
+            switch (key.getKind()) {
+                case NormalKey:
+                    handleNormalKeys(key);
+                    break;
+            }
         }
     }
 
@@ -109,6 +124,7 @@ public class GameLoop {
         if (key.getCharacter() == 'n') {
             resetGame();
         } else if (key.getCharacter() == 'q') {
+            gameSounds.stopMusic();
             gameOver = true;
             gameArea.displayPlayerQuitMessage();
         } else if (key.getCharacter() == 'd') {
@@ -123,10 +139,12 @@ public class GameLoop {
         if (collision && player.getPlayerLife() == 1) {
             gameOver();
         } else if (collision && player.getPlayerLife() > 0) {
+            gameSounds.playerDeathSound();
             player.playerLooseLife();
             player.reset();
         }
     }
+
 
     // STUFF HAPPENS BASED ON PLAYER SCORE SECTION
     private void addStuffBasedOnPlayerScore() {
@@ -194,16 +212,21 @@ public class GameLoop {
         gameArea.update();
     }
 
+
     private void pickUpExtraLives() {
         boolean pickingUpLives = extraLife.collisionDetectionPlayerVsExtraLife(player);
         if (pickingUpLives) {
+            gameSounds.extraLife();
             player.playerWinLife();
         }
     }
 
+
     // HELPER METHODS
     private void gameOver() {
+        gameSounds.stopMusic();
         boolean newHighScore = calculatingHighScore();
+        gameSounds.gameOver();
         gameOver = true;
         screen.clear();
         gameArea.render();

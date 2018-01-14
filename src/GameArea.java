@@ -3,7 +3,6 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.ScreenCharacterStyle;
 import com.googlecode.lanterna.terminal.Terminal;
 
-import java.util.Random;
 
 public class GameArea {
 
@@ -13,6 +12,7 @@ public class GameArea {
     private Terminal.Color black = Terminal.Color.BLACK;
     private Terminal.Color yellow = Terminal.Color.YELLOW;
     private String borderCharacter = "*";
+    private GameSounds gameSounds = new GameSounds();
 
     public int getTopBorder() {
         return topBorder;
@@ -75,28 +75,29 @@ public class GameArea {
         screen.putString(73, 8, "Lives: " + player.getPlayerLife(), yellow, black);
         update();
     }
-
-    public void displayPlayerLives(int playerLives) {
-        screen.putString(73, 8, "Lives: " + playerLives, yellow, black);
+    public void displayPlayerQuitMessage() {
+        for (int i = 3; i >= 0; i--) {
+            sleep(1000);
+            gameSounds.escCounterSound();
+            screen.clear();
+            screen.putString(40, 12, "Thank you for playing!", yellow, black);
+            screen.putString(29, 14, "This window will self destruct in " + i + " seconds", yellow, black);
+            update();
+        }
+        screen.clear();
+        screen.putString(47, 14, "Bye Bye!", yellow, black);
         update();
+        sleep(1500);
+        gameSounds.escBoom();
+        screen.stopScreen();
+        update();
+        screen.stopScreen();
+
     }
 
-    public void displayPlayerQuitMessage() {
-        screen.clear();
-        screen.putString(40, 12, "Thank you for playing!", yellow, black);
-        screen.putString(29, 14, "This window will self destruct in 4 seconds", yellow, black);
-        update();
+    public void sleep(int milliSec) {
         try {
-            for (int i = 3; i >= 0; i--) {
-                Thread.sleep(1000);
-                screen.putString(29, 14, "This window will self destruct in " + i + " seconds", yellow, black);
-                update();
-            }
-            screen.clear();
-            screen.putString(47, 14, "Bye Bye!", yellow, black);
-            update();
-            Thread.sleep(1500);
-            screen.stopScreen();
+            Thread.sleep(milliSec);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
