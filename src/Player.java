@@ -19,14 +19,13 @@ public class Player extends Character {
     }
 
     public void playerLooseLife() {
-        if(playerLife > 0) {
+        if (playerLife > 0) {
             playerLife--;
         }
     }
 
     public void playerWinLife() {
-        playerLife++;
-        if(playerLife < 3) {
+        if (playerLife < 3) {
             playerLife++;
         }
     }

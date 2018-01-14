@@ -9,7 +9,7 @@ public class GameLoop {
     private GameArea gameArea = new GameArea();
     private ExtraLife extraLife = new ExtraLife();
 
-    // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
+    // Removes the need for extra methods in the gameArea class...
     Screen screen = gameArea.screen;
 
     boolean gameOver;
@@ -40,7 +40,6 @@ public class GameLoop {
         while (!gameOver) {
             screen.clear();
             renderGameAssets();
-            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
@@ -55,6 +54,7 @@ public class GameLoop {
         renderPlayer();
         addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
+        extraLife.renderLife(gameArea);
     }
 
     // HANDLING PLAYER INPUT
@@ -68,24 +68,28 @@ public class GameLoop {
                 case ArrowUp:
                     handlePlayerMovement("up");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
                 case ArrowDown:
                     handlePlayerMovement("down");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
                 case ArrowLeft:
                     handlePlayerMovement("left");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
                 case ArrowRight:
                     handlePlayerMovement("right");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
@@ -190,6 +194,13 @@ public class GameLoop {
         gameArea.update();
     }
 
+    private void pickUpExtraLives() {
+        boolean pickingUpLives = extraLife.collisionDetectionPlayerVsExtraLife(player);
+        if (pickingUpLives) {
+            player.playerWinLife();
+        }
+    }
+
     // HELPER METHODS
     private void gameOver() {
         boolean newHighScore = calculatingHighScore();
@@ -198,7 +209,7 @@ public class GameLoop {
         gameArea.render();
         screen.putString(46, 14, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
         screen.putString(40, 16, "Your final score: " + playerScore, Terminal.Color.RED, Terminal.Color.BLACK);
-        if(newHighScore) {
+        if (newHighScore) {
             screen.putString(77, 8, "NEW HIGH SCORE!!!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
         }
         gameArea.displayCurrentHighScore(highScore);

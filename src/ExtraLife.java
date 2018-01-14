@@ -15,8 +15,8 @@ public class ExtraLife {
     private LinkedList<ExtraLife> extraLives = new LinkedList<>();
 
     public ExtraLife() {
-        this.lifeX = randNumGen.nextInt((38))+31;
-        this.lifeY = randNumGen.nextInt((18))+6;
+        this.lifeX = randNumGen.nextInt((38)) + 31;
+        this.lifeY = randNumGen.nextInt((18)) + 6;
         this.duration = 30;
     }
 
@@ -64,5 +64,41 @@ public class ExtraLife {
                 extraLives.remove(tempLife);
             }
         }
+    }
+
+    public boolean collisionDetectionPlayerVsExtraLife(Player player) {
+        int pX = player.getX();
+        int pY = player.getY();
+        int pSpeed = player.getSpeed();
+        int lifeX, lifeY;
+        boolean pickUpMovingLeft, pickUpMovingRight, pickUpMovingUp, pickUpMovingDown;
+
+        for (int i = 0; i < extraLives.size(); i++) {
+            tempLife = extraLives.get(i);
+            lifeX = tempLife.getLifeX();
+            lifeY = tempLife.getLifeY();
+            // Player move right
+            pickUpMovingRight = (pX + pSpeed == lifeX && pY == lifeY) || (pX + pSpeed == lifeX + 1 && pY == lifeY);
+            // Player move left
+            pickUpMovingLeft = (pX - pSpeed == lifeX && pY == lifeY) || (pX - pSpeed == lifeX - 1 && pY == lifeY);
+            // Player move up
+            pickUpMovingUp = (pY - pSpeed == lifeY && pX == lifeX) || (pY - pSpeed == lifeY - 1 && pX == lifeX);
+            // Player move down
+            pickUpMovingDown = (pY + pSpeed == lifeY && pX == lifeX) || (pY + pSpeed == lifeY + 1 && pX == lifeX);
+
+            if (pickUpMovingLeft || pickUpMovingRight || pickUpMovingUp || pickUpMovingDown) {
+                extraLives.remove(tempLife);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getLifeX() {
+        return lifeX;
+    }
+
+    public int getLifeY() {
+        return lifeY;
     }
 }

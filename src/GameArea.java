@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class GameArea {
 
-    private int leftBorder = 30,rightBorder = 70;
-    private int topBorder = 5,bottomBorder =25;
+    private int leftBorder = 30, rightBorder = 70;
+    private int topBorder = 5, bottomBorder = 25;
     private Terminal.Color green = Terminal.Color.GREEN;
     private Terminal.Color black = Terminal.Color.BLACK;
     private Terminal.Color yellow = Terminal.Color.YELLOW;
@@ -70,8 +70,14 @@ public class GameArea {
     public void displayPlayerScore(int playerScore) {
         screen.putString(73, 6, "Score: " + playerScore, yellow, black);
     }
+
     public void displayPlayerLives(Player player) {
         screen.putString(73, 8, "Lives: " + player.getPlayerLife(), yellow, black);
+        update();
+    }
+
+    public void displayPlayerLives(int playerLives) {
+        screen.putString(73, 8, "Lives: " + playerLives, yellow, black);
         update();
     }
 
@@ -81,7 +87,7 @@ public class GameArea {
         screen.putString(29, 14, "This window will self destruct in 4 seconds", yellow, black);
         update();
         try {
-            for(int i = 3; i >= 0; i--) {
+            for (int i = 3; i >= 0; i--) {
                 Thread.sleep(1000);
                 screen.putString(29, 14, "This window will self destruct in " + i + " seconds", yellow, black);
                 update();
