@@ -16,7 +16,7 @@ public class GameLoop {
     int playerX, playerY, playerSpeed;
     int playerScore, highScore;
 
-    // GAME AREA BORDERS
+    // GAME AREA BORDERS    
     private int leftBorder = 30, rightBorder = 70;
     private int topBorder = 5, bottomBorder = 25;
 
@@ -195,9 +195,11 @@ public class GameLoop {
         gameArea.update();
     }
 
+
     // HELPER METHODS
     private void gameOver() {
         gameSounds.stopMusic();
+        gameSounds.gameOver();
         boolean newHighScore = calculatingHighScore();
         gameOver = true;
         screen.clear();

@@ -12,39 +12,37 @@ public class GameSounds {
         }catch (Exception e){
         }
     }
-
-
 //    Make sound for steps
-public void playerStepsSound(){
+    public void playerStepsSound(){
     File walk = new File("Sounds/walk.WAV");
     soundPlayer(walk);
 }
-
-
 //    Make sound for death
-public void playerDeathSound(){
+    public void playerDeathSound(){
     File bite = new File("Sounds/bite.WAV");
     soundPlayer(bite);
 }
-
-
 //    Make sound for escCounter
-public void escCounterSound() {
+    public void escCounterSound() {
     File blipSound = new File("Sounds/blip.WAV");
     soundPlayer(blipSound);
 }
-public void escBoom(){
+    public void escBoom(){
     File bomb = new File("Sounds/bomb.WAV");
     soundPlayer(bomb);
 }
+    public  void gameOver(){
+        File game_over = new File("Sounds/gameOver.wav");
+        soundPlayer(game_over);
+    }
 
-public void gameMusic(){
+    public void gameMusic(){
 
-        File themeMusic = new File("Sounds/gameMusicLoop.wav");
+        File themeMusic = new File("Sounds/themesong2.wav");
         themePlayer(themeMusic);
 }
 
-public void stopMusic(){
+    public void stopMusic(){
     if (themeMusic.isOpen()){
         themeMusic.stop();
     }
