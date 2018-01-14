@@ -9,16 +9,23 @@ public class GameLoop {
     private GameArea gameArea = new GameArea();
     private GameSounds gameSounds = new GameSounds();
     private ExtraLife extraLife = new ExtraLife();
+
     // Removes the need for extra methods in the gameArea class... Check handleKeyPress();
+
+
+    // Removes the need for extra methods in the gameArea class...
+
     Screen screen = gameArea.screen;
 
     boolean gameOver;
     int playerX, playerY, playerSpeed;
     int playerScore, highScore;
 
-    // GAME AREA BORDERS    
-    private int leftBorder = 30, rightBorder = 70;
-    private int topBorder = 5, bottomBorder = 25;
+
+    // GAME AREA BORDERS
+    private int leftBorder = gameArea.getLeftBorder(), rightBorder = gameArea.getRightBorder();
+    private int topBorder = gameArea.getTopBorder(), bottomBorder = gameArea.getBottomBorder();
+
 
     // CONSTRUCTOR
     public GameLoop() {
@@ -31,6 +38,7 @@ public class GameLoop {
         gameSounds.gameMusic();
         player = new Player();
         playerScore = 0;
+        extraLife.removeAllExtraLives();
         monsterHandler = new MonsterHandler();
         gameOver = false;
         gameArea.gameAreaReset();
@@ -42,7 +50,6 @@ public class GameLoop {
         while (!gameOver) {
             screen.clear();
             renderGameAssets();
-            extraLife.renderLife(gameArea);
             handleKeyPress();
             gameArea.update();
         }
@@ -53,9 +60,11 @@ public class GameLoop {
     private void renderGameAssets() {
         gameArea.render();
         gameArea.displayPlayerScore(playerScore);
+        gameArea.displayPlayerLives(player);
         renderPlayer();
         addStuffBasedOnPlayerScore();
         monsterHandler.renderMonsters(screen);
+        extraLife.renderLife(gameArea);
     }
 
     // HANDLING PLAYER INPUT
@@ -70,6 +79,7 @@ public class GameLoop {
                     gameSounds.playerStepsSound();
                     handlePlayerMovement("up");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
@@ -77,6 +87,7 @@ public class GameLoop {
                     gameSounds.playerStepsSound();
                     handlePlayerMovement("down");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
@@ -84,6 +95,7 @@ public class GameLoop {
                     gameSounds.playerStepsSound();
                     handlePlayerMovement("left");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
@@ -91,6 +103,7 @@ public class GameLoop {
                     gameSounds.playerStepsSound();
                     handlePlayerMovement("right");
                     monsterHandler.handleMovement(player);
+                    pickUpExtraLives();
                     collisionDetection();
                     run();
                     break;
@@ -122,12 +135,16 @@ public class GameLoop {
 
     // COLLISION DETECTION
     private void collisionDetection() {
-        gameOver = monsterHandler.collisionDetectionMonsterVsPlayer(player);
-        if (gameOver) {
-            gameSounds.playerDeathSound();
+        boolean collision = monsterHandler.collisionDetectionMonsterVsPlayer(player);
+        if (collision && player.getPlayerLife() == 1) {
             gameOver();
+        } else if (collision && player.getPlayerLife() > 0) {
+            gameSounds.playerDeathSound();
+            player.playerLooseLife();
+            player.reset();
         }
     }
+
 
     // STUFF HAPPENS BASED ON PLAYER SCORE SECTION
     private void addStuffBasedOnPlayerScore() {
@@ -152,28 +169,28 @@ public class GameLoop {
         switch (direction) {
             case "up":
                 if (playerY - playerSpeed <= topBorder) {
-                    player.setPlayerY(topBorder + 1);
+                    player.setY(topBorder + 1);
                 } else {
                     player.moveUp();
                 }
                 break;
             case "down":
                 if (playerY + playerSpeed >= bottomBorder) {
-                    player.setPlayerY(bottomBorder - 1);
+                    player.setY(bottomBorder - 1);
                 } else {
                     player.moveDown();
                 }
                 break;
             case "left":
                 if (playerX - playerSpeed <= leftBorder) {
-                    player.setPlayerX(leftBorder + 1);
+                    player.setX(leftBorder + 1);
                 } else {
                     player.moveLeft();
                 }
                 break;
             case "right":
                 if (playerX + playerSpeed >= rightBorder) {
-                    player.setPlayerX(rightBorder - 1);
+                    player.setX(rightBorder - 1);
                 } else {
                     player.moveRight();
                 }
@@ -184,9 +201,9 @@ public class GameLoop {
     }
 
     private void getPlayerPositionAndSpeed() {
-        playerX = player.getPlayerX();
-        playerY = player.getPlayerY();
-        playerSpeed = player.getPlayerSpeed();
+        playerX = player.getX();
+        playerY = player.getY();
+        playerSpeed = player.getSpeed();
     }
 
     private void renderPlayer() {
@@ -196,17 +213,26 @@ public class GameLoop {
     }
 
 
+    private void pickUpExtraLives() {
+        boolean pickingUpLives = extraLife.collisionDetectionPlayerVsExtraLife(player);
+        if (pickingUpLives) {
+            gameSounds.extraLife();
+            player.playerWinLife();
+        }
+    }
+
+
     // HELPER METHODS
     private void gameOver() {
         gameSounds.stopMusic();
-        gameSounds.gameOver();
         boolean newHighScore = calculatingHighScore();
+        gameSounds.gameOver();
         gameOver = true;
         screen.clear();
         gameArea.render();
         screen.putString(46, 14, "GAME OVER", Terminal.Color.RED, Terminal.Color.BLACK);
         screen.putString(40, 16, "Your final score: " + playerScore, Terminal.Color.RED, Terminal.Color.BLACK);
-        if(newHighScore) {
+        if (newHighScore) {
             screen.putString(77, 8, "NEW HIGH SCORE!!!", Terminal.Color.YELLOW, Terminal.Color.BLACK);
         }
         gameArea.displayCurrentHighScore(highScore);

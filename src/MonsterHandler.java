@@ -8,39 +8,39 @@ public class MonsterHandler {
 
     private Monster tempMonster;
 
-     public boolean collisionDetectionMonsterVsPlayer(Player player) {
-         int pX = player.getPlayerX();
-         int pY = player.getPlayerY();
-         int mX, mY;
-
-         for (int i = 0; i < monsters.size(); i++) {
-             tempMonster = monsters.get(i);
-             mX = tempMonster.getMonsterX();
-             mY = tempMonster.getMonsterY();
-
-             if(pX == mX && pY == mY){
-                 return true;
-             }
-         }
-         return false;
-     }
-
-     public void handleMovement(Player player) {
-         int pX = player.getPlayerX();
-         int pY = player.getPlayerY();
+    public boolean collisionDetectionMonsterVsPlayer(Player player) {
+        int pX = player.getX();
+        int pY = player.getY();
+        int mX, mY;
 
         for (int i = 0; i < monsters.size(); i++) {
             tempMonster = monsters.get(i);
-            int diffX = getPositionDifference(pX, tempMonster.getMonsterX());
-            int diffY = getPositionDifference(pY, tempMonster.getMonsterY());
+            mX = tempMonster.getX();
+            mY = tempMonster.getY();
 
-            if (diffX == 0 && diffY < 0){
+            if (pX == mX && pY == mY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void handleMovement(Player player) {
+        int pX = player.getX();
+        int pY = player.getY();
+
+        for (int i = 0; i < monsters.size(); i++) {
+            tempMonster = monsters.get(i);
+            int diffX = getPositionDifference(pX, tempMonster.getX());
+            int diffY = getPositionDifference(pY, tempMonster.getY());
+
+            if (diffX == 0 && diffY < 0) {
                 tempMonster.moveUp();
-            } else if(diffX == 0 && diffY > 0){
+            } else if (diffX == 0 && diffY > 0) {
                 tempMonster.moveDown();
-            } else if(diffY == 0 && diffX < 0) {
+            } else if (diffY == 0 && diffX < 0) {
                 tempMonster.moveLeft();
-            } else if(diffY == 0 && diffX > 0) {
+            } else if (diffY == 0 && diffX > 0) {
                 tempMonster.moveRight();
             } else {
                 if (diffX < 0 && diffY < 0) {
@@ -58,19 +58,19 @@ public class MonsterHandler {
                 }
             }
         }
-     }
+    }
 
-     private int getPositionDifference(int playerPos, int monsterPos) {
-         return playerPos - monsterPos;
-     }
+    private int getPositionDifference(int playerPos, int monsterPos) {
+        return playerPos - monsterPos;
+    }
 
     public void addMonster(Monster monster, Player player) {
-        if (monster.getMonsterX() != player.getPlayerX() && monster.getMonsterY() != player.getPlayerY()){
+        if (monster.getX() != player.getX() && monster.getY() != player.getY()) {
             this.monsters.add(monster);
         }
     }
 
-    public void deleteAllMonsters(){
+    public void deleteAllMonsters() {
         this.monsters.clear();
     }
 
@@ -81,7 +81,7 @@ public class MonsterHandler {
     public void renderMonsters(Screen screen) {
         for (int i = 0; i < monsters.size(); i++) {
             tempMonster = monsters.get(i);
-            screen.putString(tempMonster.getMonsterX(), tempMonster.getMonsterY(), "M", Terminal.Color.RED, Terminal.Color.BLACK);
+            screen.putString(tempMonster.getX(), tempMonster.getY(), "M", Terminal.Color.RED, Terminal.Color.BLACK);
         }
         screen.refresh();
     }
